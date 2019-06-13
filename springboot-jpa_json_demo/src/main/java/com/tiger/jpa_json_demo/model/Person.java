@@ -2,11 +2,11 @@ package com.tiger.jpa_json_demo.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Person
@@ -14,6 +14,7 @@ import javax.persistence.Id;
  * @version 1.0
  */
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
 public class Person {
@@ -26,4 +27,8 @@ public class Person {
 
     @Column(name = "agee", nullable = true, length = 4)
     private int age;
+
+    @CreatedDate
+    @Column(name = "gifttime")
+    private Date gifttime;
 }

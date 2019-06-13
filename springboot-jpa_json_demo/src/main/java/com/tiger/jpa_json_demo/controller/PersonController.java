@@ -3,13 +3,17 @@ package com.tiger.jpa_json_demo.controller;
 import com.tiger.jpa_json_demo.dao.PersonDao;
 import com.tiger.jpa_json_demo.model.Person;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * PersonController
  *
  * @version 1.0
  */
+@EnableJpaAuditing
 @RestController
 @RequestMapping(value = "api/person")
 public class PersonController {
@@ -29,7 +33,7 @@ public class PersonController {
     }
 
     @GetMapping("getPerson")
-    public Object getPerson(@RequestParam("name") String name) {
+    public List<Person> getPerson(@RequestParam("name") String name) {
         return personDao.findByName(name);
     }
 }

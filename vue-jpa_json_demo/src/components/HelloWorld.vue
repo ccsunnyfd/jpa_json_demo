@@ -1,10 +1,15 @@
 <template>
   <div class="hello">
-    <ul>
-      <li>Post Response: {{ postResp }}</li>
-      <li>Get Response: {{ getResp }}</li>
-      <button @click="getData">点我获取数据</button>
-    </ul>
+    <h2>Post Response: {{ postResp }}</h2>
+    <h2>
+      Get Response:
+      <ul>
+        <li v-for="item in getResp" :key="item.id">
+          <div class="gifttime">{{ item.gifttime | formatDateTime }}</div>
+        </li>
+      </ul>
+    </h2>
+    <button @click="getData">点我获取数据</button>
   </div>
 </template>
 
@@ -16,7 +21,7 @@ export default {
   data: function() {
     return {
       postResp: null,
-      getResp: null
+      getResp: []
     };
   },
   props: {
