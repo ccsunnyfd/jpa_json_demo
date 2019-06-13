@@ -17,7 +17,7 @@ public class PersonController {
     private PersonDao personDao;
 
     // 如果使用@RequestBody，那么会自动将从前端传过来的json格式的参数封装为java bean对象，可以解决Postman在Post body中发送json格式的数据接收不到的问题
-    // 如果不使用@RequestBody，那么vue前端脚本在跨域请求时需要加上{ emulateJSON: true }，使用了@RequestBody则要注释掉这个JSON模拟，否则浏览器会报415错误
+    // 如果不使用@RequestBody，那么vue-resource方式的前端脚本在跨域请求时需要加上{ emulateJSON: true }，使用了@RequestBody则要注释掉这个JSON模拟，否则浏览器会报415错误
     @PostMapping(path = "addPerson")
     public void addPerson(@RequestBody Person person) {
         personDao.save(person);

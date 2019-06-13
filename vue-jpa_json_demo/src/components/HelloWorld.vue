@@ -3,11 +3,14 @@
     <ul>
       <li>Post Response: {{ postResp }}</li>
       <li>Get Response: {{ getResp }}</li>
+      <button @click="getData">点我获取数据</button>
     </ul>
   </div>
 </template>
 
 <script>
+import Config from "@/config.js";
+
 export default {
   name: "HelloWorld",
   data: function() {
@@ -19,57 +22,44 @@ export default {
   props: {
     msg: String
   },
-  mounted() {
+  created() {
     this.postData();
-    this.getData();
   },
   methods: {
     postData() {
-      var url = "http://localhost:8080/api/person/addPerson";
-      this.$http
-        .post(
-          url,
-          {
-            name: "Jack",
-            age: 11
-          }
-          // { emulateJSON: true }
-        )
-        .then(
-          res => {
-            if (!res.ok) {
-              alert("请求出错!");
-            }
-            this.postResp = res.body;
-          },
-          err => {
-            window.console.log(err);
-          }
-        );
+      var api = Config.api + "person/addPerson";
+      this.axios({
+        method: "post",
+        url: api,
+        data: {
+          name: "Michael",
+          age: 15
+        }
+      }).then(
+        response => {
+          this.postResp = response.data;
+        },
+        err => {
+          window.console.log(err);
+        }
+      );
     },
     getData() {
-      var url = "http://localhost:8080/api/person/getPerson";
-      this.$http
-        .get(
-          url,
-          {
-            params: {
-              name: "Mary"
-            }
-          }
-          // { emulateJSON: true }
-        )
-        .then(
-          res => {
-            if (!res.ok) {
-              alert("请求出错!");
-            }
-            this.getResp = res.body;
-          },
-          err => {
-            window.console.log(err);
-          }
-        );
+      var api = Config.api + "person/getPerson";
+      this.axios({
+        method: "get",
+        url: api,
+        params: {
+          name: "Michael"
+        }
+      }).then(
+        response => {
+          this.getResp = response.data;
+        },
+        err => {
+          window.console.log(err);
+        }
+      );
     }
   }
 };
