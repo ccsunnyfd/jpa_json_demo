@@ -3,11 +3,11 @@
     <h2>Post Response: {{ postResp }}</h2>
     <h2>
       Get Response:
-      <ul>
-        <li v-for="item in getResp" :key="item.id">
-          <div class="gifttime">{{ item.gifttime | formatDateTime }}</div>
-        </li>
-      </ul>
+      <el-card class="box-card">
+        <div v-for="item in getResp" :key="item.id" class="text item">
+          {{ item.gifttime | formatDateTime }}
+        </div>
+      </el-card>
     </h2>
     <button @click="getData">点我获取数据</button>
   </div>
@@ -72,6 +72,17 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.text {
+  font-size: 14px;
+}
+
+.item {
+  padding: 18px 0;
+}
+
+.box-card {
+  width: 480px;
+}
 h3 {
   margin: 40px 0 0;
 }
