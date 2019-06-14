@@ -15,7 +15,6 @@ import java.util.List;
  *
  * @version 1.0
  */
-@EnableJpaAuditing
 @RestController
 @RequestMapping(value = "api/person")
 @Api(value = "person信息的增删改查")

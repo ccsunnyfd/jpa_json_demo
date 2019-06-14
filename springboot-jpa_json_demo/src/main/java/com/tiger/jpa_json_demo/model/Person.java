@@ -2,6 +2,7 @@ package com.tiger.jpa_json_demo.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -19,7 +20,9 @@ import java.util.Date;
 @Setter
 public class Person {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO,
+            generator = "native")
+    @GenericGenerator(name = "native", strategy = "native")
     private Long id;
 
     @Column(name = "name", nullable = true, length = 20)
