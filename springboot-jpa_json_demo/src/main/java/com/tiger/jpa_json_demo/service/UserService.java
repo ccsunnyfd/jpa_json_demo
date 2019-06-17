@@ -71,9 +71,9 @@ public class UserService implements UserDetailsService {
 
         Long uid = userDao.save(user).getId();
         if (uid != null) {
-            return 2;
+            return 0;
         }
-        return 0;
+        return 2;
     }
 
     @Transactional

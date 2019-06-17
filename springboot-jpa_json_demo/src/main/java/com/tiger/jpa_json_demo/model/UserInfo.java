@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -49,13 +50,19 @@ public class UserInfo implements UserDetails {
     @JoinTable(name = "user_role", inverseJoinColumns = @JoinColumn(name="role_id"), joinColumns = @JoinColumn(name = "user_id"))
     private Set<RoleInfo> roles;
 
+    @Column(name = "email", length=20)
     private String email;
+
+    @Column(name = "userface", length = 50)
     private String userface;
+
+    @CreatedDate
+    @Column(name = "reg_time")
     private Date regTime;
 
     @Override
     @JsonIgnore
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public List<GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
         for (RoleInfo role : roles) {
             authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));

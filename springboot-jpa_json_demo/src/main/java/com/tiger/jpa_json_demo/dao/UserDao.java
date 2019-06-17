@@ -21,17 +21,17 @@ public interface UserDao extends JpaRepository<UserInfo, Long> {
     UserInfo getUserInfoById(Long id);
 
     @Modifying
-    @Query("update Userinfo set email = :email where id = :id")
+    @Query("update UserInfo u set u.email = :email where u.id = :id")
     void updateEmailById(@Param("email") String email, @Param("id") Long id);
 
     @Modifying
-    @Query("update Userinfo set enabled = :enabled where id = :id")
+    @Query("update UserInfo u set u.enabled = :enabled where u.id = :id")
     void updateUserEnabled(@Param("enabled") Integer enabled, @Param("id") Long id);
 
     @Modifying
-    @Query("delete from user_role ur where ur.user_id = ?1")
-    void deleteUserRolesByUid(Long id);
+    @Query(value = "delete from user_role where ur.user_id = :id", nativeQuery = true)
+    void deleteUserRolesByUid(@Param("id") Long id);
 
-    @Query(value = "INSERT INTO user_role(rold_id, user_id) values(?1, ?2)", nativeQuery=true)
-    void addUserRole(Long rid, Long cid);
+    @Query(value = "insert into user_role(role_id,user_id) values(:rid, :uid)", nativeQuery = true)
+    void addUserRole(@Param("rid") Long rid, @Param("uid") Long uid);
 }
