@@ -29,14 +29,14 @@ public class TagController {
 
     /**
      * 添加指定tag
-     * api: localhost:8080/api/tag/addTag
+     * api: localhost:8080/api/tag/saveTag
      *
      * @param tag tag
      */
-    @PostMapping(path = "addTag")
-    @ApiOperation(value = "添加指定tag")
+    @PostMapping(path = "saveTag")
+    @ApiOperation(value = "添加或更新指定tag")
     public RespBean addTag(@RequestBody TagInfo tag) {
-        Long result = tagService.addTag(tag);
+        Long result = tagService.saveTag(tag);
         if (result != null) {
             return new RespBean("success", result + "");
         } else {

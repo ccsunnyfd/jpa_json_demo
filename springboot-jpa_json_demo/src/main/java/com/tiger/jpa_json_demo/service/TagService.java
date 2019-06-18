@@ -21,7 +21,7 @@ public class TagService {
     }
 
     @Transactional
-    public Long addTag(TagInfo tag) {
+    public Long saveTag(TagInfo tag) {
         //处理空串
         if (tag.getTagName() == null || "".equals(tag.getTagName())) {
             return (long)-1;

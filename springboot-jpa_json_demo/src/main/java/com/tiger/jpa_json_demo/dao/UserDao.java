@@ -29,9 +29,9 @@ public interface UserDao extends JpaRepository<UserInfo, Long> {
     void updateUserEnabled(@Param("enabled") Integer enabled, @Param("id") Long id);
 
     @Modifying
-    @Query(value = "delete from user_role where ur.user_id = :id", nativeQuery = true)
-    void deleteUserRolesByUid(@Param("id") Long id);
+    @Query(value = "delete from user_role  where user_id = ?1", nativeQuery = true)
+    void deleteUserRolesByUid(Long id);
 
-    @Query(value = "insert into user_role(role_id,user_id) values(:rid, :uid)", nativeQuery = true)
-    void addUserRole(@Param("rid") Long rid, @Param("uid") Long uid);
+    @Query(value = "insert into user_role(role_id, user_id) values(?1, ?2)", nativeQuery = true)
+    void addUserRole(Long rid, Long uid);
 }

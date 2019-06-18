@@ -35,25 +35,30 @@ public class Article {
     @Column(name = "title", nullable = false, length = 70)
     private String title;
 
-    @Column(columnDefinition="TEXT", name = "mdContent")
+    @Column(columnDefinition = "TEXT", name = "mdContent")
     private String mdContent;
 
-    @Column(columnDefinition="TEXT", name = "htmlContent")
+    @Column(columnDefinition = "TEXT", name = "htmlContent")
     private String htmlContent;
 
     @Column(name = "summary", length = 200)
     private String summary;
-//
+    //
 //    @
 //    private Long cid;
 //
-//    @
-//    private Long uid;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id")
+    private Long uid;
 
     @CreatedDate
-    @Column(name = "publishDate")
-    private Date publishDate;
+    @Column(name = "createTime")
+    private Date createTime;
 
+    @Column(name = "publishTime")
+    private Date publishTime;
+
+    //0表示草稿箱，1表示已发表，2表示已删除'
     @Column(name = "state", nullable = false, length = 1)
     private Integer state;
 
@@ -65,19 +70,19 @@ public class Article {
     @Column(name = "editTime")
     private Date editTime;
 
-//    @ManyToMany
-//    private String[] dynamicTags;
-//
-//
 //    private String nickname;
 
-//    private String cateName;
+    // 分类
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id")
+    private CategoryInfo category;
 
+    // 标签（可以多个）
     // 多对多关系的主动维护方
     // 在getArticleById返回自动序列化json格式的时候，为了避免无限循环引用多对多关系出现溢出，需要加上JsonManagedReference注解
     // 在需要双向返回child信息时，不用JsonManagedReference/JsonBackReference. 使用JsonIdentityInfo(https://www.baeldung.com/jackson-bidirectional-relationships-and-infinite-recursion)。
     @ManyToMany(cascade = CascadeType.REFRESH)
-    @JoinTable(name = "article_tag", inverseJoinColumns = @JoinColumn(name="tag_id"), joinColumns = @JoinColumn(name = "article_id"))
+    @JoinTable(name = "article_tag", inverseJoinColumns = @JoinColumn(name = "tag_id"), joinColumns = @JoinColumn(name = "article_id"))
     private Set<TagInfo> tags;
 
 //
