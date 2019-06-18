@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
  * @version 1.0
  */
 @RestController
-@RequestMapping(value = "api/auth")
 @Api(value = "article信息的增删改查")
 public class LoginRegController {
     private UserService userService;
@@ -59,7 +58,7 @@ public class LoginRegController {
      *
      * @param user user
      */
-    @PostMapping(path = "reg")
+    @PostMapping(path = "api/auth/reg")
     @ApiOperation(value = "注册账号")
     public RespBean reg(@RequestBody UserInfo user) {
         int result = userService.reg(user);

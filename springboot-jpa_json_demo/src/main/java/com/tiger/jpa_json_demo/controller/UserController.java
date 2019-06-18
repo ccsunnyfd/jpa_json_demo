@@ -19,7 +19,6 @@ import java.util.List;
  * @version 1.0
  */
 @RestController
-@RequestMapping(value = "api/auth")
 @Api(value = "用户信息的增删改查")
 public class UserController {
     private UserService userService;
@@ -69,7 +68,7 @@ public class UserController {
      *
      * @param email email
      */
-    @PutMapping(path = "updateUserEmail")
+    @PutMapping(path = "api/auth/updateUserEmail")
     @ApiOperation(value = "更新账号邮箱")
     public RespBean updateUserEmail(@RequestBody String email) {
         userService.updateUserEmail(email);
