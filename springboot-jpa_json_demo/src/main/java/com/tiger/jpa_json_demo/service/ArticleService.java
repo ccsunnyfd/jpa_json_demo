@@ -50,8 +50,8 @@ public class ArticleService {
                 //设置发表时间
                 article.setPublishTime(publishTime);
             }
-            //设置当前用户uid
-            article.setUid(Util.getCurrentUser().getId());
+            //设置当前用户
+            article.setUser(Util.getCurrentUser());
             Long aid = articleDao.save(article).getId();
             return aid;
         } else {
@@ -91,13 +91,11 @@ public class ArticleService {
     }
 
     public List<Article> getArticleByStateAndKeywordByUid(Integer state, Integer page, Integer size, String keyword) {
-        Long uid = Util.getCurrentUser().getId();
-        return articleDao.getArticlesByStateAndKeywordByUidPageable(uid, state, keyword, PageRequest.of(page, size)).getContent();
+        return articleDao.getArticlesByStateAndKeywordByUidPageable(Util.getCurrentUser(), state, keyword, PageRequest.of(page, size)).getContent();
     }
 
     public List<Article> getArticleByStateByUid(Integer state, Integer page, Integer size) {
-        Long uid = Util.getCurrentUser().getId();
-        return articleDao.getArticlesByStateByUidPageable(uid, state, PageRequest.of(page, size)).getContent();
+        return articleDao.getArticlesByStateByUidPageable(Util.getCurrentUser(), state, PageRequest.of(page, size)).getContent();
     }
 
     public List<Article> getArticleByStateAndKeyword(Integer state, Integer page, Integer size, String keyword) {

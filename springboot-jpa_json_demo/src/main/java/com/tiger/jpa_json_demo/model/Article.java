@@ -48,8 +48,7 @@ public class Article {
 //    private Long cid;
 //
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
-    private Long uid;
+    private UserInfo user;
 
     @CreatedDate
     @Column(name = "createTime")
@@ -74,7 +73,6 @@ public class Article {
 
     // 分类
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
     private CategoryInfo category;
 
     // 标签（可以多个）

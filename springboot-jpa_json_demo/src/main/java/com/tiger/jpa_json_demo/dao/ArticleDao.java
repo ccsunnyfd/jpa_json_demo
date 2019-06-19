@@ -1,6 +1,7 @@
 package com.tiger.jpa_json_demo.dao;
 
 import com.tiger.jpa_json_demo.model.Article;
+import com.tiger.jpa_json_demo.model.UserInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,11 +17,11 @@ import org.springframework.data.repository.query.Param;
 public interface ArticleDao  extends JpaRepository<Article, Long> {
     Article getArticleById(Long aid);
 
-    @Query(value = "select a from Article a where a.uid=:uid and a.state=:state and a.title LIKE CONCAT('%',:keyword,'%') order by a.editTime desc")
-    Page<Article> getArticlesByStateAndKeywordByUidPageable(@Param("uid") Long uid, @Param("state") Integer state, @Param("keyword") String keyword, Pageable pageable);
+    @Query(value = "select a from Article a where a.user=:user and a.state=:state and a.title LIKE CONCAT('%',:keyword,'%') order by a.editTime desc")
+    Page<Article> getArticlesByStateAndKeywordByUidPageable(@Param("user")UserInfo user, @Param("state") Integer state, @Param("keyword") String keyword, Pageable pageable);
 
-    @Query(value = "select a from Article a where a.uid=:uid and a.state=:state order by a.editTime desc")
-    Page<Article> getArticlesByStateByUidPageable(@Param("uid") Long uid, @Param("state") Integer state, Pageable pageable);
+    @Query(value = "select a from Article a where a.user=:user and a.state=:state order by a.editTime desc")
+    Page<Article> getArticlesByStateByUidPageable(@Param("user")UserInfo user, @Param("state") Integer state, Pageable pageable);
 
     @Query(value = "select a from Article a where a.state=:state and a.title LIKE CONCAT('%',:keyword,'%') order by a.editTime desc")
     Page<Article> getArticlesByStateAndKeywordPageable(@Param("state") Integer state, @Param("keyword") String keyword, Pageable pageable);
@@ -28,11 +29,11 @@ public interface ArticleDao  extends JpaRepository<Article, Long> {
     @Query(value = "select a from Article a where a.state=:state order by a.editTime desc")
     Page<Article> getArticlesByStatePageable(@Param("state") Integer state, Pageable pageable);
 
-    @Query(value = "select count(a) from Article a where a.uid=:uid and a.state=:state and a.title LIKE CONCAT('%',:keyword,'%')")
-    int getArticleCountByStateAndKeywordByUid(@Param("uid") Long uid, @Param("state") Integer state, @Param("keyword") String keyword);
+    @Query(value = "select count(a) from Article a where a.user=:user and a.state=:state and a.title LIKE CONCAT('%',:keyword,'%')")
+    int getArticleCountByStateAndKeywordByUid(@Param("user")UserInfo user, @Param("state") Integer state, @Param("keyword") String keyword);
 
-    @Query(value = "select count(a) from Article a where a.uid=:uid and a.state=:state")
-    int getArticleCountByStateByUid(@Param("uid") Long uid, @Param("state") Integer state);
+    @Query(value = "select count(a) from Article a where a.user=:user and a.state=:state")
+    int getArticleCountByStateByUid(@Param("user")UserInfo user, @Param("state") Integer state);
 
     @Query(value = "select count(a) from Article a where a.state=:state and a.title LIKE CONCAT('%',:keyword,'%')")
     int getArticleCountByStateAndKeyword(@Param("state") Integer state, @Param("keyword") String keyword);
