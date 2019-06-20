@@ -26,6 +26,6 @@ public class RoleInfo {
     @Column(name = "name", nullable = false, length = 20)
     private String name;
 
-    @ManyToMany(cascade = CascadeType.REFRESH, mappedBy = "roles", fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.REFRESH, mappedBy = "roles", fetch = FetchType.EAGER)
     private Set<UserInfo> users;
 }

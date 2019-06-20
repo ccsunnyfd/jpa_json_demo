@@ -12,7 +12,7 @@ import java.io.IOException;
  *
  * @version 1.0
  */
-@Component
+//@Component
 public class CorsFilter implements Filter {
 
     /*跨域请求配置*/
@@ -20,7 +20,6 @@ public class CorsFilter implements Filter {
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         HttpServletResponse response = (HttpServletResponse) res;
 
-        HttpServletRequest reqs = (HttpServletRequest) req;
         response.setHeader("Access-Control-Allow-Origin","*");
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, OPTIONS, DELETE");

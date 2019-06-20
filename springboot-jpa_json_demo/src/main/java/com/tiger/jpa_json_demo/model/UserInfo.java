@@ -20,7 +20,7 @@ import java.util.*;
  *
  * @version 1.0
  */
-@Table(name="Userinfo")
+@Table(name = "Userinfo")
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Getter
@@ -46,11 +46,12 @@ public class UserInfo implements UserDetails {
     @Column(name = "enabled", columnDefinition = "int default 1")
     private Integer enabled;    // 1:enabled 0:disabled
 
-    @ManyToMany(cascade = CascadeType.REFRESH)
-    @JoinTable(name = "user_role", inverseJoinColumns = @JoinColumn(name="role_id"), joinColumns = @JoinColumn(name = "user_id"))
+    //这里用延迟初始化查询时会报错，用EAGER
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @JoinTable(name = "user_role", inverseJoinColumns = @JoinColumn(name = "role_id"), joinColumns = @JoinColumn(name = "user_id"))
     private Set<RoleInfo> roles;
 
-    @Column(name = "email", length=20)
+    @Column(name = "email", length = 20)
     private String email;
 
     @Column(name = "userface", length = 50)
@@ -72,7 +73,7 @@ public class UserInfo implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return getEnabled() == 1;
+        return (this.getEnabled() != null) && (this.getEnabled() == 1);
     }
 
     @Override

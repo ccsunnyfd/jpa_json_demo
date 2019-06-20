@@ -5,6 +5,8 @@ import com.tiger.jpa_json_demo.dao.UserDao;
 import com.tiger.jpa_json_demo.model.RoleInfo;
 import com.tiger.jpa_json_demo.model.UserInfo;
 import com.tiger.jpa_json_demo.utils.Util;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -26,6 +28,8 @@ public class UserService implements UserDetailsService {
     private RolesDao rolesDao;
     private UserDao userDao;
 
+    private Logger logger = LoggerFactory.getLogger(getClass());
+
     @Autowired
     public void setRolesDao(RolesDao rolesDao) {
         this.rolesDao = rolesDao;
@@ -38,6 +42,7 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        logger.info("用户名： {}", s);
         UserInfo user = userDao.findUserInfoByUsername(s);
         if (user == null) {
             return new UserInfo();
