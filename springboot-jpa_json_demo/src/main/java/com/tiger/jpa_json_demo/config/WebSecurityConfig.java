@@ -79,8 +79,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             @Override
             public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
                 httpServletResponse.setContentType("application/json;charset=utf-8");
-                //重点：解决跨域问题，这里要单独设置一遍。
-                httpServletResponse.setHeader("Access-Control-Allow-Origin", "*");
+                //重点：解决跨域问题，这里要单独设置一遍。并且不能设置"*",因为后续的ajax请求要携带credential,规定要指定Origin.
+                httpServletResponse.setHeader("Access-Control-Allow-Origin", "http://localhost:9090");
                 PrintWriter out = httpServletResponse.getWriter();
                 out.write("{\"status\":\"success\",\"msg\":\"登录成功\"}");
                 out.flush();
@@ -91,8 +91,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     @Override
                     public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
                         httpServletResponse.setContentType("application/json;charset=utf-8");
-                        //重点：解决跨域问题，这里要单独设置一遍。
-                        httpServletResponse.setHeader("Access-Control-Allow-Origin", "*");
+                        //重点：解决跨域问题，这里要单独设置一遍。并且不能设置"*",因为后续的ajax请求要携带credential,规定要指定Origin.
+                       httpServletResponse.setHeader("Access-Control-Allow-Origin", "http://localhost:9090");
                         PrintWriter out = httpServletResponse.getWriter();
                         out.write("{\"status\":\"error\",\"msg\":\"登录失败\"}");
                         out.flush();
@@ -100,7 +100,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     }
                 }).loginProcessingUrl("/login")///vue的路由页面
                 .usernameParameter("username").passwordParameter("password").permitAll()
-                .and().logout().permitAll().and().csrf().disable().exceptionHandling().accessDeniedHandler(getAccessDeniedHandler());
+                //.and().logout().permitAll().and().csrf().disable().exceptionHandling().accessDeniedHandler(getAccessDeniedHandler());
+                .and().logout().permitAll().and().cors().and().csrf().disable().exceptionHandling().accessDeniedHandler(getAccessDeniedHandler());
     }
 
     @Bean

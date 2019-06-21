@@ -28,7 +28,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("currentuserNickname")
+    @GetMapping("currentUserNickname")
     @ApiOperation(value = "获取用户昵称")
     public String currentUserNickname() {
         return Util.getCurrentUser().getNickname();
