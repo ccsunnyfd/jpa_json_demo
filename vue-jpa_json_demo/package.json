@@ -13,6 +13,7 @@
     "element-ui": "^2.9.1",
     "font-awesome": "^4.7.0",
     "vue": "^2.6.10",
+    "vue-bus": "^1.2.1",
     "vue-router": "^3.0.6"
   },
   "devDependencies": {

@@ -90,20 +90,22 @@ public class ArticleService {
         return content;
     }
 
+    // 注意，PageRequest.of的第一个参数表示第几页，从0开始计数，这与通常的分页从1开始有些不同，要处理下
+
     public List<Article> getArticleByStateAndKeywordByUid(Integer state, Integer page, Integer size, String keyword) {
-        return articleDao.getArticlesByStateAndKeywordByUidPageable(Util.getCurrentUser(), state, keyword, PageRequest.of(page, size)).getContent();
+        return articleDao.getArticlesByStateAndKeywordByUidPageable(Util.getCurrentUser(), state, keyword, PageRequest.of(page-1, size)).getContent();
     }
 
     public List<Article> getArticleByStateByUid(Integer state, Integer page, Integer size) {
-        return articleDao.getArticlesByStateByUidPageable(Util.getCurrentUser(), state, PageRequest.of(page, size)).getContent();
+        return articleDao.getArticlesByStateByUidPageable(Util.getCurrentUser(), state, PageRequest.of(page-1, size)).getContent();
     }
 
     public List<Article> getArticleByStateAndKeyword(Integer state, Integer page, Integer size, String keyword) {
-        return articleDao.getArticlesByStateAndKeywordPageable(state, keyword, PageRequest.of(page, size)).getContent();
+        return articleDao.getArticlesByStateAndKeywordPageable(state, keyword, PageRequest.of(page-1, size)).getContent();
     }
 
     public List<Article> getArticleByState(Integer state, Integer page, Integer size) {
-        return articleDao.getArticlesByStatePageable(state, PageRequest.of(page, size)).getContent();
+        return articleDao.getArticlesByStatePageable(state, PageRequest.of(page-1, size)).getContent();
     }
 
     public int getArticleCountByStateAndKeyword(Integer state, String keywords) {
@@ -116,11 +118,11 @@ public class ArticleService {
 
 //
 //    public List<Article> getArticleByStateAndKeywordByAdmin(Integer state, Integer page, Integer size, String keyword) {
-//        return articleDao.getArticlesByStateAndKeywordPageable(state, keyword, PageRequest.of(page, size)).getContent();
+//        return articleDao.getArticlesByStateAndKeywordPageable(state, keyword, PageRequest.of(page-1, size)).getContent();
 //    }
 //
 //    public List<Article> getArticleByStateByAdmin(Integer state, Integer page, Integer size) {
-//        return articleDao.getArticlesByStatePageable(state, PageRequest.of(page, size)).getContent();
+//        return articleDao.getArticlesByStatePageable(state, PageRequest.of(page-1, size)).getContent();
 //    }
 
 

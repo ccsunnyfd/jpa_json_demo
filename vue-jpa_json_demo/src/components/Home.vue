@@ -19,7 +19,9 @@
         </el-dropdown>
       </div>
     </el-header>
+    <!-- 左边导航栏，右边内容区，放在一个container里面 -->
     <el-container>
+      <!-- 左边垂直导航栏 -->
       <el-aside width="200px">
         <el-menu
           default-active="0"
@@ -61,7 +63,23 @@
           </template>
         </el-menu>
       </el-aside>
+
+      <!-- 右边显示内容 -->
+      <el-container>
+        <el-main>
+          <el-breadcrumb separator-class="el-icon-arrow-right">
+            <el-breadcrumb-item :to="{path:'/home'}">
+              首页</el-breadcrumb-item>
+            <el-breadcrumb-item v-text="this.$router.currentRoute.meta.title"></el-breadcrumb-item>
+          </el-breadcrumb>
+          <keep-alive>
+            <router-view v-if="this.$route.meta.keepAlive"></router-view>
+          </keep-alive>
+          <router-view v-if="!this.$route.meta.keepAlive"></router-view>
+        </el-main>
+      </el-container>
     </el-container>
+
   </el-container>
 </template>
 
