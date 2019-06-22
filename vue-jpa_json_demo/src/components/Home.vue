@@ -19,6 +19,49 @@
         </el-dropdown>
       </div>
     </el-header>
+    <el-container>
+      <el-aside width="200px">
+        <el-menu
+          default-active="0"
+          class="el-menu-vertical-demo"
+          style="background-color: #ECECEC"
+          router
+        >
+          <template v-for="(item, index) in this.$router.options.routes.filter(function (item) {
+            return item.meta.menuShow
+            })">
+            <el-submenu
+              :index="index + ''"
+              v-if="item.children.length>1"
+              :key="index"
+            >
+              <template slot="title">
+                <i :class="item.meta.iconCls"></i>
+                <span>{{item.meta.title}}</span>
+              </template>
+              <el-menu-item
+                v-for="child in item.children.filter(function (child) {
+                  return child.meta.menuShow
+                  })"
+                :index="child.path"
+                :key="child.path"
+              >
+                {{child.meta.title}}
+              </el-menu-item>
+            </el-submenu>
+            <template v-else>
+              <el-menu-item
+                :index="item.children[0].path"
+                :key="item.children[0].path"
+              >
+                <i :class="item.children[0].meta.iconCls"></i>
+                <span slot="title">{{item.children[0].meta.title}}</span>
+              </el-menu-item>
+            </template>
+          </template>
+        </el-menu>
+      </el-aside>
+    </el-container>
   </el-container>
 </template>
 
@@ -60,8 +103,12 @@ export default {
     });
     var _this = this;
     getRequest("/currentUserNickname").then(
-      function(msg) {
-        _this.currentUserName = msg.data;
+      function(message) {
+        if (message.data.status != null) {
+          _this.currentUserName = message.data.msg;
+        } else {
+          _this.currentUserName = message.data;
+        }
       },
       function() {
         _this.currentUserName = "游客";
