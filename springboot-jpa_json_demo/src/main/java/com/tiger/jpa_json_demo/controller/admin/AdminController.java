@@ -3,9 +3,12 @@ package com.tiger.jpa_json_demo.controller.admin;
 import com.tiger.jpa_json_demo.model.Article;
 import com.tiger.jpa_json_demo.model.RespBean;
 import com.tiger.jpa_json_demo.service.ArticleService;
+import com.tiger.jpa_json_demo.utils.Util;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -40,21 +43,17 @@ public class AdminController {
      * @return Map
      */
     @GetMapping("article/all")
-    @ApiOperation(value = "查询所有article信息(state 0表示草稿箱，1表示已发表，2表示已删除)")
-    public Map<String, Object> getArticleByStateByAdmin(@RequestParam(value = "state", defaultValue = "1") Integer state,
-                                                        @RequestParam(value = "page", defaultValue = "1") Integer page,
+    @ApiOperation(value = "查询所有article信息(state 0表示草稿箱，1表示已发表，2表示回收站, -1表示全部状态)")
+    public Map<String, Object> getArticleByStateByAdmin(@RequestParam(value = "page", defaultValue = "1") Integer page,
                                                         @RequestParam(value = "size", defaultValue = "6") Integer size,
                                                         @RequestParam(value = "keyword") String keyword) {
         Map<String, Object> map = new HashMap<>();
         List<Article> articles;
+        Sort sort = new Sort(Sort.Direction.DESC, "edit_time");
         int totalCount = 0;
-        if (keyword == null || keyword.trim().isEmpty()) {
-            articles = articleService.getArticleByState(state, page, size);
-            totalCount = articleService.getArticleCountByState(state);
-        } else {
-            articles = articleService.getArticleByStateAndKeyword(state, page, size, keyword);
-            totalCount = articleService.getArticleCountByStateAndKeyword(state, keyword);
-        }
+        Page<Article> pageArticles = articleService.getPageArticles(null, null, keyword == null ? null : keyword.trim(), page, size, sort);
+        articles = pageArticles.getContent();
+        totalCount = (int) pageArticles.getTotalElements();
         map.put("articles", articles);
         map.put("totalCount", totalCount);
         return map;
