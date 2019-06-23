@@ -1,41 +1,53 @@
 <template>
   <div>
+    <!-- 搜索条 -->
     <div style="display: flex;justify-content: flex-start">
-      <el-input placeholder="通过标题搜索该分类下的博客..." prefix-icon="el-icon-search" v-model="keyword" style="width: 400px" size="mini">
-      </el-input>
-      <el-button type="primary" icon="el-icon-search" size="mini" style="margin-left: 3px" @click="searchClick">搜索
-      </el-button>
+      <el-input placeholder="通过标题搜索该分类下的博客..." prefix-icon="el-icon-search" v-model="keyword" style="width: 400px" size="mini"></el-input>
+      <el-button type="primary" icon="el-icon-search" size="mini" style="margin-left: 3px" @click="searchClick">搜索</el-button>
     </div>
+
     <!--<div style="width: 100%;height: 1px;background-color: #20a0ff;margin-top: 8px;margin-bottom: 0px"></div>-->
+    <!-- 带选择框的表格 -->
     <el-table ref="multipleTable" :data="articles" tooltip-effect="dark" style="width: 100%;overflow-x: hidden; overflow-y: hidden;" max-height="390" @selection-change="handleSelectionChange" v-loading="loading">
-      <el-table-column type="selection" width="35" align="left" v-if="showEdit || showDelete">
-      </el-table-column>
+
+      <!-- 可编辑或可删除状态下，条目前方要有一个多选框供复选 -->
+      <el-table-column type="selection" width="35" align="left" v-if="showEdit || showDelete"></el-table-column>
+
+      <!-- 标题栏 -->
       <el-table-column label="标题" width="400" align="left">
-        <template slot-scope="scope"><span style="color: #409eff;cursor: pointer" @click="itemClick(scope.row)">{{ scope.row.title}}</span>
+        <template slot-scope="scope">
+          <span style="color: #409eff;cursor: pointer" @click="itemClick(scope.row)">{{ scope.row.title}}</span>
         </template>
       </el-table-column>
+
+      <!-- 上次编辑时间栏 -->
       <el-table-column label="最近编辑时间" width="140" align="left">
         <template slot-scope="scope">{{ scope.row.editTime | formatDateTime}}</template>
       </el-table-column>
-      <el-table-column prop="nickname" label="作者" width="120" align="left">
-      </el-table-column>
-      <el-table-column prop="cateName" label="所属分类" width="120" align="left">
-      </el-table-column>
+
+      <!-- 作者栏 -->
+      <el-table-column prop="nickname" label="作者" width="120" align="left"></el-table-column>
+
+      <!-- 分类栏 -->
+      <el-table-column prop="cateName" label="所属分类" width="120" align="left"></el-table-column>
+
+      <!-- 编辑删除按纽栏 -->
       <el-table-column label="操作" align="left" v-if="showEdit || showDelete">
         <template slot-scope="scope">
-          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)" v-if="showEdit">编辑
-          </el-button>
-          <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)" v-if="showDelete">删除
-          </el-button>
+          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)" v-if="showEdit">编辑</el-button>
+          <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)" v-if="showDelete">删除</el-button>
         </template>
       </el-table-column>
+
     </el-table>
+
+    <!-- 页脚 -->
     <div class="blog_table_footer">
-      <el-button type="danger" size="mini" style="margin: 0px;" v-show="this.articles.length>0 && showDelete" :disabled="this.selItems.length==0" @click="deleteMany">批量删除
-      </el-button>
+      <!-- 复选删除按钮 -->
+      <el-button type="danger" size="mini" style="margin: 0px;" v-show="this.articles.length>0 && showDelete" :disabled="this.selItems.length==0" @click="deleteMany">批量删除</el-button>
       <span></span>
-      <el-pagination background :page-size="pageSize" layout="prev, pager, next" :total="totalCount" @current-change="currentChange" v-show="this.articles.length>0">
-      </el-pagination>
+      <!-- 分页跳转导航 -->
+      <el-pagination background :page-size="pageSize" layout="prev, pager, next" :total="totalCount" @current-change="currentChange" v-show="this.articles.length>0"></el-pagination>
     </div>
   </div>
 </template>
@@ -43,14 +55,12 @@
 <script>
 import { putRequest } from "../utils/api";
 import { getRequest } from "../utils/api";
-//  import Vue from 'vue'
-//  var bus = new Vue()
 
 export default {
   data() {
     return {
       articles: [],
-      selItems: [],
+      selItems: [], // 复选选中的项
       loading: false,
       currentPage: 1,
       totalCount: -1,
@@ -59,6 +69,7 @@ export default {
       dustbinData: []
     };
   },
+  props: ["authority", "articleState", "showEdit", "showDelete", "activeName"], //authority:-2表示管理员权限
   mounted: function() {
     var _this = this;
     this.loading = true;
@@ -82,7 +93,7 @@ export default {
       }
       this.deleteToDustBin(selItems[0].state);
     },
-    //翻页
+    //翻页(切换页码的操作引起数据重新加载)
     currentChange(currentPage) {
       this.currentPage = currentPage;
       this.loading = true;
@@ -91,7 +102,7 @@ export default {
     loadBlogs(page, size) {
       var _this = this;
       var url = "";
-      if (this.state == -2) {
+      if (this.authority == -2) {
         url =
           "/admin/article/all" +
           "?page=" +
@@ -102,8 +113,8 @@ export default {
           this.keyword;
       } else {
         url =
-          "/admin/article/all?state=" +
-          this.state +
+          "/article/all?state=" +
+          this.articleState +
           "&page=" +
           page +
           "&size=" +
@@ -148,7 +159,7 @@ export default {
     },
     handleDelete(index, row) {
       this.dustbinData.push(row.id);
-      this.deleteToDustBin(row.state);
+      this.deleteToDustBin(row.authority);
     },
     deleteToDustBin(state) {
       var _this = this;
@@ -166,10 +177,10 @@ export default {
         .then(() => {
           _this.loading = true;
           var url = "";
-          if (_this.state == -2) {
+          if (_this.authority == -2) {
             url = "/admin/article/dustbin";
           } else {
-            url = "/admin/article/dustbin";
+            url = "/article/dustbin";
           }
           putRequest(url, { aids: _this.dustbinData, state: state }).then(
             resp => {
@@ -200,8 +211,7 @@ export default {
           _this.dustbinData = [];
         });
     }
-  },
-  props: ["state", "showEdit", "showDelete", "activeName"]
+  }
 };
 </script>
 
