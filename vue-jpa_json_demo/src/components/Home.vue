@@ -11,10 +11,7 @@
             <el-dropdown-item command="sysMsg">系统消息</el-dropdown-item>
             <el-dropdown-item command="MyArticle">我的文章</el-dropdown-item>
             <el-dropdown-item command="MyHome">个人主页</el-dropdown-item>
-            <el-dropdown-item
-              command="logout"
-              divided
-            >退出登录</el-dropdown-item>
+            <el-dropdown-item command="logout" divided>退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -23,39 +20,23 @@
     <el-container>
       <!-- 左边垂直导航栏 -->
       <el-aside width="200px">
-        <el-menu
-          default-active="0"
-          class="el-menu-vertical-demo"
-          style="background-color: #ECECEC"
-          router
-        >
+        <el-menu default-active="0" class="el-menu-vertical-demo" style="background-color: #ECECEC" router>
           <template v-for="(item, index) in this.$router.options.routes.filter(function (item) {
             return item.meta.menuShow
             })">
-            <el-submenu
-              :index="index + ''"
-              v-if="item.children.length>1"
-              :key="index"
-            >
+            <el-submenu :index="index + ''" v-if="item.children.length>1" :key="index">
               <template slot="title">
                 <i :class="item.meta.iconCls"></i>
                 <span>{{item.meta.title}}</span>
               </template>
-              <el-menu-item
-                v-for="child in item.children.filter(function (child) {
+              <el-menu-item v-for="child in item.children.filter(function (child) {
                   return child.meta.menuShow
-                  })"
-                :index="child.path"
-                :key="child.path"
-              >
+                  })" :index="child.path" :key="child.path">
                 {{child.meta.title}}
               </el-menu-item>
             </el-submenu>
             <template v-else>
-              <el-menu-item
-                :index="item.children[0].path"
-                :key="item.children[0].path"
-              >
+              <el-menu-item :index="item.children[0].path" :key="item.children[0].path">
                 <i :class="item.children[0].meta.iconCls"></i>
                 <span slot="title">{{item.children[0].meta.title}}</span>
               </el-menu-item>
