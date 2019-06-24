@@ -18,19 +18,19 @@ public interface UserDao extends JpaRepository<UserInfo, Long> {
 
     List<UserInfo> getUserInfoByNickname(String nickname);
 
-    UserInfo getUserInfoById(Long id);
+    UserInfo getUserInfoById(Long uid);
 
     @Modifying
-    @Query("update UserInfo u set u.email = :email where u.id = :id")
-    void updateEmailById(@Param("email") String email, @Param("id") Long id);
+    @Query("update UserInfo u set u.email = :email where u.id = :uid")
+    void updateEmailById(@Param("email") String email, @Param("uid") Long uid);
 
     @Modifying
-    @Query("update UserInfo u set u.enabled = :enabled where u.id = :id")
-    void updateUserEnabled(@Param("enabled") Integer enabled, @Param("id") Long id);
+    @Query("update UserInfo u set u.enabled = :enabled where u.id = :uid")
+    void updateUserEnabled(@Param("enabled") Integer enabled, @Param("uid") Long uid);
 
     @Modifying
     @Query(value = "delete from user_role  where user_id = ?1", nativeQuery = true)
-    void deleteUserRolesByUid(Long id);
+    void deleteUserRolesByUid(Long uid);
 
     @Query(value = "insert into user_role(role_id, user_id) values(?1, ?2)", nativeQuery = true)
     void addUserRole(Long rid, Long uid);

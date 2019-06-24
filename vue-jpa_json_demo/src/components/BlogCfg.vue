@@ -38,7 +38,7 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           _this.loading = true;
-          putRequest("/updateUserEmail", {
+          putRequest("/api/updateUserEmail", {
             email: _this.emailValidateForm.email
           }).then(
             resp => {

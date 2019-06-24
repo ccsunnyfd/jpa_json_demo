@@ -64,13 +64,13 @@ public class UserController {
 
     /**
      * 注册账号
-     * api: localhost:8080/api/auth/updateUserEmail
+     * api: localhost:8080/api/updateUserEmail
      *
      * @param email email
      */
-    @PutMapping(path = "api/auth/updateUserEmail")
+    @PutMapping(path = "api/updateUserEmail")
     @ApiOperation(value = "更新账号邮箱")
-    public RespBean updateUserEmail(@RequestBody String email) {
+    public RespBean updateUserEmail(String email) {
         userService.updateUserEmail(email);
         return new RespBean("success", "更新邮箱成功!");
     }
