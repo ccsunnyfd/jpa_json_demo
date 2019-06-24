@@ -37,7 +37,7 @@ public class ArticleController {
 
     /**
      * 管理员权限文章分页查询
-     * api: localhost:8080/api/admin/article/all
+     * api: localhost:8080/api/article/all
      *
      * @param page    第几页
      * @param size    每页几条记录
@@ -87,9 +87,9 @@ public class ArticleController {
      * @param aid aid
      * @return Article
      */
-    @GetMapping("getArticleById")
+    @GetMapping("{aid}")
     @ApiOperation(value = "根据id查询article信息")
-    public Article getArticleById(@RequestParam("aid") Long aid) {
+    public Article getArticleById(@PathVariable Long aid) {
         return articleService.getArticleById(aid);
     }
 }

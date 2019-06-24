@@ -3,6 +3,8 @@ import Router from 'vue-router'
 import Login from '@/components/Login'
 import Home from '@/components/Home'
 import ArticleList from '@/components/ArticleList'
+import BlogDetail from '@/components/BlogDetail'
+import PostArticle from '@/components/PostArticle'
 
 Vue.use(Router)
 
@@ -38,7 +40,7 @@ export default new Router({
                 }, {
                     path: '/postArticle',
                     name: 'postArticle',
-                    //component: PostArticle,
+                    component: PostArticle,
                     meta: {
                         title: '发表文章',
                         menuShow: true,
@@ -47,7 +49,7 @@ export default new Router({
                 }, {
                     path: '/blogDetail',
                     name: 'blogDetail',
-                    //component: BlogDetail,
+                    component: BlogDetail,
                     meta: {
                         title: '博客详情',
                         menuShow: false,
