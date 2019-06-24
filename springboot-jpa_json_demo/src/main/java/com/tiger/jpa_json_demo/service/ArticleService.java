@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -45,6 +46,7 @@ public class ArticleService {
     //article.id:
     // -1:添加操作
     // 其他：更新操作
+    @Modifying
     @Transactional
     public Long addArticle(Article article) {
         //处理文章摘要
@@ -54,9 +56,9 @@ public class ArticleService {
             article.setSummary(stripHtml.substring(0, stripHtml.length() > 50 ? 50 : stripHtml.length()));
         }
         Date publishTime = new Date();
-        if (article.getId() == -1) {
+        if (article.getId() == -1) {  // -1表示是新增操作
             //新增操作
-            if (article.getState() == 1) {
+            if (article.getState() == 1) {  // 1表示如果是要直接发表
                 //设置发表时间
                 article.setPublishTime(publishTime);
             }
@@ -65,7 +67,7 @@ public class ArticleService {
             return articleDao.save(article).getId();
         } else {
             //更新操作
-            if (article.getState() == 1) {
+            if (article.getState() == 1) {   // 1表示如果是要直接发表
                 //设置发表时间
                 article.setPublishTime(publishTime);
             }

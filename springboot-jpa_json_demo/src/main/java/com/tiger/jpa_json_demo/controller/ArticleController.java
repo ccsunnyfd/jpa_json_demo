@@ -70,7 +70,7 @@ public class ArticleController {
      * @param article article
      */
     @PostMapping(path = "addArticle")
-    @ApiOperation(value = "添加指定article")
+    @ApiOperation(value = "添加或更新指定article")
     public RespBean addArticle(@RequestBody Article article) {
         Long result = articleService.addArticle(article);
         if (result != null) {
@@ -82,7 +82,7 @@ public class ArticleController {
 
     /**
      * 根据id查询article信息
-     * api: localhost:8080/api/article/getArticleById?aid=xxx
+     * api: localhost:8080/api/article/{aid}
      *
      * @param aid aid
      * @return Article

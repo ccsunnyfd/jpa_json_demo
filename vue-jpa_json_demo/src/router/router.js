@@ -58,7 +58,7 @@ export default new Router({
                 }, {
                     path: '/editBlog',
                     name: 'editBlog',
-                    //component: PostArticle,
+                    component: PostArticle,
                     meta: {
                         title: '编辑博客',
                         menuShow: false,

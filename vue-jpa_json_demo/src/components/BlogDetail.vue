@@ -33,9 +33,20 @@ import { getRequest } from "@/utils/api";
 export default {
   data() {
     return {
-      article: {},
+      article: {
+        title: "",
+        user: {
+          nickname: "",
+        },
+        pageView: "",
+        editTime: "",
+      },
       loading: false,
-      activeName: ""
+      activeName: "",
+      tags: {
+        tagName: "",
+      },
+      htmlContent: "",
     };
   },
   methods: {

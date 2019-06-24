@@ -58,7 +58,7 @@ public class Article {
     @Column(name = "publishTime")
     private Date publishTime;
 
-    //0表示草稿箱，1表示已发表，2表示已删除'
+    //0表示草稿箱，1表示已发表，2表示草稿箱'
     @Column(name = "state", nullable = false, length = 1)
     private Integer state;
 

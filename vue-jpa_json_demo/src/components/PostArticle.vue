@@ -1,13 +1,13 @@
 <template>
   <el-container v-loading="loading" class="post-article">
     <el-header class="header">
-      <el-select v-model="article.cid" placeholder="请选择文章栏目" style="width: 150px;">
+      <el-select v-model="article.category.id" placeholder="请选择文章栏目" style="width: 150px;">
         <el-option v-for="item in categories" :key="item.id" :label="item.cateName" :value="item.id">
         </el-option>
       </el-select>
       <el-input v-model="article.title" placeholder="请输入标题..." style="width: 400px;margin-left: 10px"></el-input>
-      <el-tag :key="tag" v-for="tag in article.dynamicTags" closable :disable-transitions="false" @close="handleClose(tag)" style="margin-left: 10px">
-        {{tag}}
+      <el-tag :key="tag.id" v-for="tag in article.tags" closable :disable-transitions="false" @close="handleClose(tag)" style="margin-left: 10px">
+        {{tag.tagName}}
       </el-tag>
       <el-input class="input-new-tag" v-if="tagInputVisible" v-model="tagValue" ref="saveTagInput" size="small" @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm">
       </el-input>
@@ -23,7 +23,7 @@
           <el-button @click="saveBlog(0)">保存到草稿箱</el-button>
           <el-button type="primary" @click="saveBlog(1)">发表文章</el-button>
         </template>
-        <template v-else="from==post">
+        <template v-else-if="from=='post'">
           <el-button type="primary" @click="saveBlog(1)">保存修改</el-button>
         </template>
       </div>
@@ -31,16 +31,17 @@
   </el-container>
 </template>
 <script>
-import { postRequest } from "../utils/api";
-import { putRequest } from "../utils/api";
-import { deleteRequest } from "../utils/api";
-import { getRequest } from "../utils/api";
-import { uploadFileRequest } from "../utils/api";
+import { postRequest } from "@/utils/api";
+import { jPostRequest } from "@/utils/api";
+import { putRequest } from "@/utils/api";
+import { deleteRequest } from "@/utils/api";
+import { getRequest } from "@/utils/api";
+import { uploadFileRequest } from "@/utils/api";
 // Local Registration
 import { mavonEditor } from "mavon-editor";
 // 可以通过 mavonEditor.markdownIt 获取解析器markdown-it对象
 import "mavon-editor/dist/css/index.css";
-import { isNotNullORBlank } from "../utils/utils";
+import { isNotNullORBlank } from "@/utils/utils";
 
 export default {
   data() {
@@ -51,11 +52,15 @@ export default {
       loading: false,
       from: "",
       article: {
-        id: "-1",
-        dynamicTags: [],
+        id: "-1",  // -1表示默认是新增操作，如果是编辑，那么会在mount时用获取的aid覆盖这里的-1
+        tags: [],
         title: "",
         mdContent: "",
-        cid: ""
+        category: {
+          id: "",
+          cateName: "",
+          modifiedTime: null,
+        }
       }
     };
   },
@@ -64,25 +69,23 @@ export default {
     var from = this.$route.query.from;
     this.from = from;
     var _this = this;
-    if (from != null && from != "" && from != undefined) {
+    // 如果是从点击编辑按钮导航过来的，需要调用API获取原来的内容展示
+    if (isNotNullORBlank(from)) {
       var id = this.$route.query.id;
       this.id = id;
       this.loading = true;
-      getRequest("/article/" + id).then(
+      getRequest("/api/article/" + id).then(
         resp => {
           _this.loading = false;
           if (resp.status == 200) {
             _this.article = resp.data;
-            var tags = resp.data.tags;
-            _this.article.dynamicTags = [];
-            for (var i = 0; i < tags.length; i++) {
-              _this.article.dynamicTags.push(tags[i].tagName);
-            }
+            _this.article.category = resp.data.category;
+            _this.article.tags = resp.data.tags;
           } else {
             _this.$message({ type: "error", message: "页面加载失败!" });
           }
         },
-        resp => {
+        () => {
           _this.loading = false;
           _this.$message({ type: "error", message: "页面加载失败!" });
         }
@@ -101,7 +104,7 @@ export default {
         !isNotNullORBlank(
           this.article.title,
           this.article.mdContent,
-          this.article.cid
+          this.article.category
         )
       ) {
         this.$message({ type: "error", message: "数据不能为空!" });
@@ -109,14 +112,18 @@ export default {
       }
       var _this = this;
       _this.loading = true;
-      postRequest("/article/", {
+      jPostRequest("/api/article/addArticle/", {
         id: _this.article.id,
         title: _this.article.title,
         mdContent: _this.article.mdContent,
         htmlContent: _this.$refs.md.d_render,
-        cid: _this.article.cid,
+        category: {
+          id: _this.article.category.id,
+          cateName: _this.article.cateName,
+          modifiedTime: null,
+        },
         state: state,
-        dynamicTags: _this.article.dynamicTags
+        tags: _this.article.tags
       }).then(
         resp => {
           _this.loading = false;
@@ -127,14 +134,14 @@ export default {
               message: state == 0 ? "保存成功!" : "发布成功!"
             });
             //            if (_this.from != undefined) {
-            window.bus.$emit("blogTableReload");
+            this.$bus.emit("blogTableReload");
             //            }
             if (state == 1) {
               _this.$router.replace({ path: "/articleList" });
             }
           }
         },
-        resp => {
+        () => {
           _this.loading = false;
           _this.$message({
             type: "error",
@@ -161,7 +168,7 @@ export default {
     imgDel(pos) {},
     getCategories() {
       let _this = this;
-      getRequest("/admin/category/all").then(resp => {
+      getRequest("/api/admin/category/all").then(resp => {
         _this.categories = resp.data;
       });
     },
@@ -170,7 +177,7 @@ export default {
     },
     showInput() {
       this.tagInputVisible = true;
-      this.$nextTick(_ => {
+      this.$nextTick(() => {
         this.$refs.saveTagInput.$refs.input.focus();
       });
     },
