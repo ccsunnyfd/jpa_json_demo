@@ -52,7 +52,7 @@ public class ArticleController {
                                                  @RequestParam(value = "keyword") String keyword) {
         Map<String, Object> map = new HashMap<>();
         List<Article> articles;
-        Sort sort = new Sort(Sort.Direction.DESC, "edit_time");
+        Sort sort = new Sort(Sort.Direction.DESC, "editTime");
         int totalCount = 0;
         Page<Article> pageArticles = articleService.getPageArticles(Util.getCurrentUser(), state == -1 ? null : state, keyword == null ? null : keyword.trim(), page, size, sort);
         articles = pageArticles.getContent();

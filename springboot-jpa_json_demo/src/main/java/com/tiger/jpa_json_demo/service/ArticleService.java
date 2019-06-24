@@ -106,7 +106,7 @@ public class ArticleService {
             public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 List<Predicate> predicates = Lists.newArrayList();
                 if (!StringUtils.isEmpty(user)) {
-                    predicates.add(criteriaBuilder.equal(root.get("user_id"), user.getId()));
+                    predicates.add(criteriaBuilder.equal(root.get("user"), user));
                 }
                 if (!StringUtils.isEmpty(state)) {
                     predicates.add(criteriaBuilder.equal(root.get("state"), state));

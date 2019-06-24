@@ -26,10 +26,14 @@
       </el-table-column>
 
       <!-- 作者栏 -->
-      <el-table-column prop="nickname" label="作者" width="120" align="left"></el-table-column>
+      <el-table-column prop="nickname" label="作者" width="120" align="left">
+        <template slot-scope="scope">{{ scope.row.user.nickname}}</template>
+      </el-table-column>
 
       <!-- 分类栏 -->
-      <el-table-column prop="cateName" label="所属分类" width="120" align="left"></el-table-column>
+      <el-table-column prop="cateName" label="所属分类" width="120" align="left">
+        <template slot-scope="scope">{{ scope.row.category.cateName}}</template>
+      </el-table-column>
 
       <!-- 编辑删除按纽栏 -->
       <el-table-column label="操作" align="left" v-if="showEdit || showDelete">
@@ -104,7 +108,7 @@ export default {
       var url = "";
       if (this.authority == -2) {
         url =
-          "/admin/article/all" +
+          "/api/admin/article/all" +
           "?page=" +
           page +
           "&size=" +
@@ -113,7 +117,7 @@ export default {
           this.keyword;
       } else {
         url =
-          "/article/all?state=" +
+          "/api/article/all?state=" +
           this.articleState +
           "&page=" +
           page +

@@ -13,3 +13,6 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+#    disable SerializationFeature.FAIL_ON_EMPTY_BEANS 可以尝试将JSON转换时的以下属性设置为 false
+    serialization:
+      fail-on-empty-beans: false

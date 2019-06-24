@@ -3,7 +3,6 @@ package com.tiger.jpa_json_demo.controller.admin;
 import com.tiger.jpa_json_demo.model.Article;
 import com.tiger.jpa_json_demo.model.RespBean;
 import com.tiger.jpa_json_demo.service.ArticleService;
-import com.tiger.jpa_json_demo.utils.Util;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,7 @@ import java.util.Map;
  * @version 1.0
  */
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/api/admin")
 @Api(value = "超级管理员专属Controller")
 public class AdminController {
     private ArticleService articleService;
@@ -49,7 +48,7 @@ public class AdminController {
                                                         @RequestParam(value = "keyword") String keyword) {
         Map<String, Object> map = new HashMap<>();
         List<Article> articles;
-        Sort sort = new Sort(Sort.Direction.DESC, "edit_time");
+        Sort sort = new Sort(Sort.Direction.DESC, "editTime");
         int totalCount = 0;
         Page<Article> pageArticles = articleService.getPageArticles(null, null, keyword == null ? null : keyword.trim(), page, size, sort);
         articles = pageArticles.getContent();
