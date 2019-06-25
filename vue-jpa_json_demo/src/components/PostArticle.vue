@@ -31,10 +31,10 @@
   </el-container>
 </template>
 <script>
-import { postRequest } from "@/utils/api";
+//import { postRequest } from "@/utils/api";
 import { jPostRequest } from "@/utils/api";
-import { putRequest } from "@/utils/api";
-import { deleteRequest } from "@/utils/api";
+//import { putRequest } from "@/utils/api";
+//import { deleteRequest } from "@/utils/api";
 import { getRequest } from "@/utils/api";
 import { uploadFileRequest } from "@/utils/api";
 // Local Registration
@@ -165,7 +165,9 @@ export default {
         }
       });
     },
-    imgDel(pos) {},
+    imgDel(pos) {
+      window.console.log(pos);
+    },
     getCategories() {
       let _this = this;
       getRequest("/api/admin/category/all").then(resp => {
