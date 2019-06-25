@@ -52,14 +52,14 @@ export default {
       loading: false,
       from: "",
       article: {
-        id: "-1",  // -1表示默认是新增操作，如果是编辑，那么会在mount时用获取的aid覆盖这里的-1
+        id: "-1", // -1表示默认是新增操作，如果是编辑，那么会在mount时用获取的aid覆盖这里的-1
         tags: [],
         title: "",
         mdContent: "",
         category: {
           id: "",
           cateName: "",
-          modifiedTime: null,
+          modifiedTime: null
         }
       }
     };
@@ -120,7 +120,7 @@ export default {
         category: {
           id: _this.article.category.id,
           cateName: _this.article.cateName,
-          modifiedTime: _this.article.modifiedTime,
+          modifiedTime: _this.article.modifiedTime
         },
         state: state,
         tags: _this.article.tags
@@ -175,7 +175,11 @@ export default {
       });
     },
     handleClose(tag) {
-      this.article.dynamicTags.splice(this.article.dynamicTags.indexOf(tag), 1);
+      for (var i = 0; i < this.article.tags.length; i++) {
+        if (this.article.tags[i].tagName == tag.tagName) {
+          this.article.tags.splice(i, 1);
+        }
+      }
     },
     showInput() {
       this.tagInputVisible = true;
@@ -185,8 +189,10 @@ export default {
     },
     handleInputConfirm() {
       let tagValue = this.tagValue;
-      if (tagValue) {
-        this.article.dynamicTags.push(tagValue);
+      if (isNotNullORBlank(tagValue)) {
+        this.article.tags.push({
+          tagName: tagValue
+        });
       }
       this.tagInputVisible = false;
       this.tagValue = "";

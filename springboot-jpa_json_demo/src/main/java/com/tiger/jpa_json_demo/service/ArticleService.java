@@ -80,6 +80,7 @@ public class ArticleService {
             oldArticle.setMdContent(article.getMdContent());
             oldArticle.setHtmlContent(article.getHtmlContent());
             oldArticle.setState(article.getState());
+            oldArticle.setTags(article.getTags());
             return articleDao.save(oldArticle).getId();
         }
     }
