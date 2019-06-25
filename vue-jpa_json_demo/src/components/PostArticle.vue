@@ -120,7 +120,7 @@ export default {
         category: {
           id: _this.article.category.id,
           cateName: _this.article.cateName,
-          modifiedTime: null,
+          modifiedTime: _this.article.modifiedTime,
         },
         state: state,
         tags: _this.article.tags

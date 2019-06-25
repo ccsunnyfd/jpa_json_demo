@@ -72,7 +72,15 @@ public class ArticleService {
                 article.setPublishTime(publishTime);
             }
             //更新
-            return articleDao.save(article).getId();
+            Article oldArticle = articleDao.getArticleById(article.getId());
+            oldArticle.setCategory(article.getCategory());
+            oldArticle.setSummary(article.getSummary());
+            oldArticle.setTitle(article.getTitle());
+            oldArticle.setPublishTime(article.getPublishTime());
+            oldArticle.setMdContent(article.getMdContent());
+            oldArticle.setHtmlContent(article.getHtmlContent());
+            oldArticle.setState(article.getState());
+            return articleDao.save(oldArticle).getId();
         }
     }
 
