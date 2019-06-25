@@ -6,8 +6,8 @@
         </el-option>
       </el-select>
       <el-input v-model="article.title" placeholder="请输入标题..." style="width: 400px;margin-left: 10px"></el-input>
-      <el-tag :key="tag.id" v-for="tag in article.tags" closable :disable-transitions="false" @close="handleClose(tag)" style="margin-left: 10px">
-        {{tag.tagName}}
+      <el-tag :key="tag.id" v-for="tag in dynamicTags" closable :disable-transitions="false" @close="handleClose(tag)" style="margin-left: 10px">
+        {{tag}}
       </el-tag>
       <el-input class="input-new-tag" v-if="tagInputVisible" v-model="tagValue" ref="saveTagInput" size="small" @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm">
       </el-input>
@@ -61,7 +61,8 @@ export default {
           cateName: "",
           modifiedTime: null
         }
-      }
+      },
+      dynamicTags: []
     };
   },
   mounted: function() {
@@ -80,7 +81,10 @@ export default {
           if (resp.status == 200) {
             _this.article = resp.data;
             _this.article.category = resp.data.category;
-            _this.article.tags = resp.data.tags;
+            var tags = resp.data.tags;
+            for (var i = 0; i < tags.length; i++) {
+              _this.dynamicTags.push(tags[i].tagName);
+            }
           } else {
             _this.$message({ type: "error", message: "页面加载失败!" });
           }
@@ -113,17 +117,20 @@ export default {
       var _this = this;
       _this.loading = true;
       jPostRequest("/api/article/addArticle/", {
-        id: _this.article.id,
-        title: _this.article.title,
-        mdContent: _this.article.mdContent,
-        htmlContent: _this.$refs.md.d_render,
-        category: {
-          id: _this.article.category.id,
-          cateName: _this.article.cateName,
-          modifiedTime: _this.article.modifiedTime
+        article: {
+          id: _this.article.id,
+          title: _this.article.title,
+          mdContent: _this.article.mdContent,
+          htmlContent: _this.$refs.md.d_render,
+          category: {
+            id: _this.article.category.id,
+            cateName: _this.article.cateName,
+            modifiedTime: _this.article.modifiedTime
+          },
+          state: state,
+          tags: _this.article.tags
         },
-        state: state,
-        tags: _this.article.tags
+        dynamicTags: _this.dynamicTags
       }).then(
         resp => {
           _this.loading = false;
@@ -175,11 +182,7 @@ export default {
       });
     },
     handleClose(tag) {
-      for (var i = 0; i < this.article.tags.length; i++) {
-        if (this.article.tags[i].tagName == tag.tagName) {
-          this.article.tags.splice(i, 1);
-        }
-      }
+      this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
     },
     showInput() {
       this.tagInputVisible = true;
@@ -190,9 +193,7 @@ export default {
     handleInputConfirm() {
       let tagValue = this.tagValue;
       if (isNotNullORBlank(tagValue)) {
-        this.article.tags.push({
-          tagName: tagValue
-        });
+        this.dynamicTags.push(tagValue);
       }
       this.tagInputVisible = false;
       this.tagValue = "";

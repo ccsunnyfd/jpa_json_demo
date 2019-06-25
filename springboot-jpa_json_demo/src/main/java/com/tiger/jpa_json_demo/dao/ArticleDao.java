@@ -11,6 +11,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 /**
  * ArticleDao
  *
@@ -59,10 +61,14 @@ public interface ArticleDao  extends JpaRepository<Article, Long>, JpaSpecificat
 //    @Query(value = "select a from Article a where a.state=:state order by a.editTime desc")
 //    Page<Article> getArticlesByStatePageableByAdmin(@Param("state") Integer state, Pageable pageable);
 
+    @Query(value = "select tag_id from article_tag where article_id = ?1", nativeQuery = true)
+    List<Long> getTagIdsFromArticle(Long aid);
+
+
     @Query(value = "insert into article_tag(tag_id, article_id) values(?1, ?2)", nativeQuery = true)
     void addTagToArticle(Long tid, Long aid);
 
     @Modifying
-    @Query(value = "delete from article_tag where tag_id = ?1 and article_id = ?2", nativeQuery = true)
-    void removeTagFromArticle(Long tid, Long aid);
+    @Query(value = "delete from article_tag where article_id = ?2", nativeQuery = true)
+    void removeAllTagsFromArticle(Long aid);
 }

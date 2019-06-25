@@ -8,6 +8,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import javax.swing.text.html.HTML;
 import java.util.Set;
 
 /**
@@ -22,7 +23,6 @@ import java.util.Set;
 // 使用generator = ObjectIdGenerators.PropertyGenerator.class, property = "id"可以解决问题，但还是会返回其他子类的信息
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class TagInfo {
-
 
     // 默认GenerationType.AUTO使用表自增，不推荐，请使用native方式
     @Id
