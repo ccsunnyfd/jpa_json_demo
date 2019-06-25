@@ -1,7 +1,6 @@
 package com.tiger.jpa_json_demo.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,8 +22,7 @@ import java.util.Set;
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
-// 使用generator = ObjectIdGenerators.PropertyGenerator.class, property = "id"可以解决问题，但还是会返回其他子类的信息
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")   // 使用generator = ObjectIdGenerators.PropertyGenerator.class, property = "id"可以解决问题，但还是会返回其他子类的信息
 public class Article {
     // 默认GenerationType.AUTO使用表自增，不推荐，请使用native方式
     @Id
@@ -44,10 +42,7 @@ public class Article {
 
     @Column(name = "summary", length = 200)
     private String summary;
-    //
-//    @
-//    private Long cid;
-//
+
     @ManyToOne(fetch = FetchType.LAZY)
     private UserInfo user;
 
@@ -70,8 +65,6 @@ public class Article {
     @Column(name = "editTime")
     private Date editTime;
 
-//    private String nickname;
-
     // 分类
     @ManyToOne(fetch = FetchType.LAZY)
     private CategoryInfo category;
@@ -84,6 +77,4 @@ public class Article {
     @JoinTable(name = "article_tag", inverseJoinColumns = @JoinColumn(name = "tag_id"), joinColumns = @JoinColumn(name = "article_id"))
     private Set<TagInfo> tags;
 
-//
-//    private String stateStr;
 }

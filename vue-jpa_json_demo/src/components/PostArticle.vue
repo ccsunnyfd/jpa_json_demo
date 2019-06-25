@@ -155,7 +155,7 @@ export default {
       // 第一步.将图片上传到服务器.
       var formdata = new FormData();
       formdata.append("image", $file);
-      uploadFileRequest("/article/uploadimg", formdata).then(resp => {
+      uploadFileRequest("/api/article/uploadimg", formdata).then(resp => {
         var json = resp.data;
         if (json.status == "success") {
           //            _this.$refs.md.$imgUpdateByUrl(pos, json.msg)

@@ -6,14 +6,19 @@ import com.tiger.jpa_json_demo.service.ArticleService;
 import com.tiger.jpa_json_demo.utils.Util;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 
 /**
@@ -26,6 +31,8 @@ import java.util.Map;
 @Api(value = "article信息的增删改查")
 public class ArticleController {
     private ArticleService articleService;
+
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 
     @Autowired
     public void setArticleService(ArticleService articleService) {
@@ -53,7 +60,7 @@ public class ArticleController {
         Map<String, Object> map = new HashMap<>();
         List<Article> articles;
         Sort sort = new Sort(Sort.Direction.DESC, "editTime");
-        int totalCount = 0;
+        int totalCount;
         Page<Article> pageArticles = articleService.getPageArticles(Util.getCurrentUser(), state == -1 ? null : state, keyword == null ? null : keyword.trim(), page, size, sort);
         articles = pageArticles.getContent();
         totalCount = (int) pageArticles.getTotalElements();
@@ -79,6 +86,46 @@ public class ArticleController {
             return new RespBean("error", article.getState() == 0 ? "文章保存失败!" : "文章发表失败!");
         }
     }
+
+
+    /**
+     * 把文件存放到网站路径http://**.**.**.**:8080/(ContextPath)/blogimg/20190625/
+     *
+     * @param req   req
+     * @param image image
+     * @return 返回值为图片的地址
+     */
+    @PostMapping(path = "uploadimg")
+    @ApiOperation(value = "上传图片")
+    public RespBean uploadImg(HttpServletRequest req, MultipartFile image) {
+        StringBuilder url = new StringBuilder();
+
+        // 创建存放图片的文件夹(如果不存在的话)
+        String filePath = "/blogimg/" + sdf.format(new Date());
+        String imgFolderPath = req.getServletContext().getRealPath(filePath);
+        File imgFolder = new File(imgFolderPath);
+        if (!imgFolder.exists()) {
+            imgFolder.mkdirs();
+        }
+
+        url.append(req.getScheme())
+                .append("://")
+                .append(req.getServerName())
+                .append(":")
+                .append(req.getServerPort())
+                .append(req.getContextPath())
+                .append(filePath);
+        String imgName = UUID.randomUUID() + "_" + image.getOriginalFilename().replaceAll(" ", "");
+        try {
+            IOUtils.write(image.getBytes(), new FileOutputStream(new File(imgFolder, imgName)));
+            url.append("/").append(imgName);
+            return new RespBean("success", url.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new RespBean("error", "上传失败!");
+    }
+
 
     /**
      * 根据id查询article信息
