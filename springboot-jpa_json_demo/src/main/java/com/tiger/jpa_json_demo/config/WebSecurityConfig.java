@@ -102,6 +102,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("username").passwordParameter("password").permitAll()
                 //.and().logout().permitAll().and().csrf().disable().exceptionHandling().accessDeniedHandler(getAccessDeniedHandler());
                 .and().logout().permitAll().and().cors().and().csrf().disable().exceptionHandling().accessDeniedHandler(getAccessDeniedHandler());
+//        http.authorizeRequests().antMatchers("*").authenticated();
+
     }
 
     @Bean
