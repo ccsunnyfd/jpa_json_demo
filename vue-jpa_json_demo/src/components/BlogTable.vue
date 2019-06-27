@@ -163,7 +163,7 @@ export default {
     },
     handleDelete(index, row) {
       this.dustbinData.push(row.id);
-      this.deleteToDustBin(row.authority);
+      this.deleteToDustBin(row.state);
     },
     deleteToDustBin(state) {
       var _this = this;
@@ -182,9 +182,9 @@ export default {
           _this.loading = true;
           var url = "";
           if (_this.authority == -2) {
-            url = "/admin/article/dustbin";
+            url = "/api/admin/article/dustbin";
           } else {
-            url = "/article/dustbin";
+            url = "/api/article/dustbin";
           }
           putRequest(url, { aids: _this.dustbinData, state: state }).then(
             resp => {

@@ -71,7 +71,7 @@ public class AdminController {
      */
     @PutMapping(path = "article/dustbin")
     @ApiOperation(value = "文章回收站处理机制")
-    public RespBean cycleArticle(@RequestBody Long[] aids, @RequestBody Integer state) {
+    public RespBean cycleArticle(@RequestParam("aids") Long[] aids, @RequestParam("state") Integer state) {
         articleService.cycleArticle(aids, state);
         return new RespBean("success", "已删除!");
     }

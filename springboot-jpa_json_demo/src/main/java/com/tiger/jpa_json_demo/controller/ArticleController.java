@@ -139,4 +139,19 @@ public class ArticleController {
     public Article getArticleById(@PathVariable Long aid) {
         return articleService.getArticleById(aid);
     }
+
+
+    /**
+     * 回收或彻底删除Article
+     * api: localhost:8080/api/article/dustbin
+     *
+     * @param aids  文章id组
+     * @param state 2:对已存在回收站中的文章彻底删除  其他：先放入回收站
+     */
+    @PutMapping(path = "dustbin")
+    @ApiOperation(value = "文章回收站处理机制")
+    public RespBean cycleArticle(@RequestParam("aids") Long[] aids, @RequestParam("state") Integer state) {
+        articleService.cycleArticle(aids, state);
+        return new RespBean("success", "已删除!");
+    }
 }
