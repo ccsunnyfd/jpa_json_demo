@@ -16,7 +16,7 @@
           </div>
           <span style="color: #20a0ff;margin-right:20px;font-size: 12px;">浏览 {{article.pageView==null?0:article.pageView}}</span>
           <span style="color: #20a0ff;margin-right:20px;font-size: 12px;"> {{article.editTime | formatDateTime}}</span>
-          <el-tag type="success" v-for="(item,index) in article.tags" :key="index" size="small" style="margin-left: 8px">{{item.tagName}}
+          <el-tag type="success" v-for="(item,index) in tagList" :key="index" size="small" style="margin-left: 8px">{{item}}
           </el-tag>
           <span style="margin:0px 50px 0px 0px"></span>
         </div>
@@ -38,16 +38,19 @@ export default {
         user: {
           nickname: "",
         },
+        tags: "",
         pageView: "",
         editTime: "",
       },
       loading: false,
       activeName: "",
-      tags: {
-        tagName: "",
-      },
       htmlContent: "",
     };
+  },
+  computed: {
+    tagList: function () {
+      return this.article.tags.split(",");
+    }
   },
   methods: {
     goBack() {
