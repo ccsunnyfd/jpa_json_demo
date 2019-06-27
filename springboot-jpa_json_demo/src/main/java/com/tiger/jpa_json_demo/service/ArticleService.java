@@ -2,9 +2,7 @@ package com.tiger.jpa_json_demo.service;
 
 import com.google.common.collect.Lists;
 import com.tiger.jpa_json_demo.dao.ArticleDao;
-import com.tiger.jpa_json_demo.dao.TagDao;
 import com.tiger.jpa_json_demo.model.Article;
-import com.tiger.jpa_json_demo.model.TagInfo;
 import com.tiger.jpa_json_demo.model.UserInfo;
 import com.tiger.jpa_json_demo.utils.Util;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +19,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * ArticleService
@@ -35,24 +30,24 @@ import java.util.stream.Collectors;
 @Service
 public class ArticleService {
     private ArticleDao articleDao;
-    private TagDao tagDao;
+//    private TagDao tagDao;
 
     @Autowired
     public void setArticleDao(ArticleDao articleDao) {
         this.articleDao = articleDao;
     }
 
-    @Autowired
-    public void setTagDao(TagDao tagDao) {
-        this.tagDao = tagDao;
-    }
+//    @Autowired
+//    public void setTagDao(TagDao tagDao) {
+//        this.tagDao = tagDao;
+//    }
 
     //article.id:
     // -1:添加操作
     // 其他：更新操作
     @Modifying
     @Transactional
-    public Long addArticle(Article article, String[] dynamicTags) {
+    public Long addArticle(Article article) {
         //处理文章摘要
         if (article.getSummary() == null || "".equals(article.getSummary())) {
             //直接截取
@@ -68,15 +63,8 @@ public class ArticleService {
             }
             //设置当前用户
             article.setUser(Util.getCurrentUser());
-            Long i = articleDao.save(article).getId();
+            return articleDao.save(article).getId();
 
-            //更新标签
-            if (dynamicTags != null && dynamicTags.length > 0) {
-                int tags = addTagsToArticle(dynamicTags, article.getId());
-                if (tags == -1) {
-                    return tags;
-                }
-            }
         } else {
             //更新操作
             if (article.getState() == 1) {   // 1表示如果是要直接发表
@@ -97,69 +85,67 @@ public class ArticleService {
         }
     }
 
-    private Boolean inList(List<String> arr, String target) {
-        for (String a : arr
-        ) {
-            if (a.equals(target)) {
-                return true;
-            }
-        }
-        return false;
-    }
+//    private Boolean inList(List<String> arr, String target) {
+//        for (String a : arr
+//        ) {
+//            if (a.equals(target)) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
 
-    private int addTagsToArticle(String[] dynamicTags, Long aid) {
+//    private int addTagsToArticle(String[] dynamicTags, Long aid) {
+//
+//        //1.查询该文章目前所有关联的标签（中间表）
+//        List<Long> tIds = articleDao.getTagIdsFromArticle(aid);
+//        List<TagInfo> currentTags = tagDao.findAllById(tIds);
+//        List<String> currentTagNames = currentTags.stream().map((x) -> x.getTagName()).collect(Collectors.toList());
+//
+//        //2. 构建还没有关联的标签
+//        List<TagInfo> tags = new ArrayList<>();
+//        for (String tag : dynamicTags
+//        ) {
+//            if (!inList(currentTagNames, tag)){
+//                TagInfo tagItem = new TagInfo();
+//                tagItem.setTagName(tag);
+//                tags.add(tagItem);
+//            }
+//
+//        }
+//
+//        //3. 寻找已经被取消关联的标签
+//
+//
+//        List<TagInfo> newTags = tagDao.saveAll(tags);
+//
+//
+//        articleDao.removeAllTagsFromArticle(aid);
+//
+//
+//        //3.将上传上来的标签全部存入数据库
+//        List<TagInfo> tags = new ArrayList<>();
+//
+//
+//        //4.查询这些标签的id
+//        List<Long> tIds = newTags.stream().map((x) -> x.getId()).collect(Collectors.toList());
+//
+//        //4.重新给文章设置标签
+//        int i = articleDao. (tIds, aid);
+//        return i == dynamicTags.length ? i : -1;
+//    }
+//
 
-        //1.查询该文章目前所有关联的标签（中间表）
-        List<Long> tIds = articleDao.getTagIdsFromArticle(aid);
-        List<TagInfo> currentTags = tagDao.findAllById(tIds);
-        List<String> currentTagNames = currentTags.stream().map((x) -> x.getTagName()).collect(Collectors.toList());
-
-        //2. 构建还没有关联的标签
-        List<TagInfo> tags = new ArrayList<>();
-        for (String tag : dynamicTags
-        ) {
-            if (!inList(currentTagNames, tag)){
-                TagInfo tagItem = new TagInfo();
-                tagItem.setTagName(tag);
-                tags.add(tagItem);
-            }
-
-        }
-
-        //3. 寻找已经被取消关联的标签
-
-
-        List<TagInfo> newTags = tagDao.saveAll(tags);
-
-
-        articleDao.removeAllTagsFromArticle(aid);
-
-
-        //3.将上传上来的标签全部存入数据库
-        List<TagInfo> tags = new ArrayList<>();
-
-
-        //4.查询这些标签的id
-        List<Long> tIds = newTags.stream().map((x) -> x.getId()).collect(Collectors.toList());
-
-        //4.重新给文章设置标签
-        int i = articleDao. (tIds, aid);
-        return i == dynamicTags.length ? i : -1;
-    }
-
-
-    ;
-
-    @Transactional
-    public void addTagToArticle(Long tid, Long aid) {
-        articleDao.addTagToArticle(tid, aid);
-    }
-
-    @Transactional
-    public void removeTagFromArticle(Long tid, Long aid) {
-        articleDao.removeTagFromArticle(tid, aid);
-    }
+//    @Transactional
+//    public void addTagToArticle(Long tid, Long aid) {
+//        articleDao.addTagToArticle(tid, aid);
+//    }
+//
+//    @Transactional
+//    public void removeTagFromArticle(Long tid, Long aid) {
+//        articleDao.removeTagFromArticle(tid, aid);
+//    }
 
     @Transactional
     public Article getArticleById(Long aid) {

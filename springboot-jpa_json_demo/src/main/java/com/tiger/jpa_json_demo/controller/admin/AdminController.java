@@ -63,7 +63,7 @@ public class AdminController {
     // 如果不使用@RequestBody，那么vue-resource方式的前端脚本在跨域请求时需要加上{ emulateJSON: true }，使用了@RequestBody则要注释掉这个JSON模拟，否则浏览器会报415错误
 
     /**
-     * 添加指定tag
+     * 回收或彻底删除Article
      * api: localhost:8080/api/admin/article/dustbin
      *
      * @param aids  文章id组

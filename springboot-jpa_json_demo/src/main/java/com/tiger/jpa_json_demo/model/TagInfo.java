@@ -16,12 +16,12 @@ import java.util.Set;
  *
  * @version 1.0
  */
-@Entity
-@EntityListeners(AuditingEntityListener.class)
-@Getter
-@Setter
+//@Entity
+//@EntityListeners(AuditingEntityListener.class)
+//@Getter
+//@Setter
 // 使用generator = ObjectIdGenerators.PropertyGenerator.class, property = "id"可以解决问题，但还是会返回其他子类的信息
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class TagInfo {
 
     // 默认GenerationType.AUTO使用表自增，不推荐，请使用native方式

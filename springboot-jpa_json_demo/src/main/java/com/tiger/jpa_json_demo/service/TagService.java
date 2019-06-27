@@ -11,26 +11,26 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @version 1.0
  */
-@Service
+//@Service
 public class TagService {
-    private TagDao tagDao;
-
-    @Autowired
-    public void setTagDao(TagDao tagDao) {
-        this.tagDao = tagDao;
-    }
-
-    @Transactional
-    public Long saveTag(TagInfo tag) {
-        //处理空串
-        if (tag.getTagName() == null || "".equals(tag.getTagName())) {
-            return (long)-1;
-        }
-        TagInfo retTag = tagDao.save(tag);
-        return retTag.getId();
-    }
-
-    public TagInfo getTagById(Long tid) {
-        return tagDao.getTagsById(tid);
-    }
+//    private TagDao tagDao;
+//
+//    @Autowired
+//    public void setTagDao(TagDao tagDao) {
+//        this.tagDao = tagDao;
+//    }
+//
+//    @Transactional
+//    public Long saveTag(TagInfo tag) {
+//        //处理空串
+//        if (tag.getTagName() == null || "".equals(tag.getTagName())) {
+//            return (long)-1;
+//        }
+//        TagInfo retTag = tagDao.save(tag);
+//        return retTag.getId();
+//    }
+//
+//    public TagInfo getTagById(Long tid) {
+//        return tagDao.getTagsById(tid);
+//    }
 }

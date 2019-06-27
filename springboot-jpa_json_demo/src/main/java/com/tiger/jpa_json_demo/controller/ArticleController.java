@@ -78,8 +78,8 @@ public class ArticleController {
      */
     @PostMapping(path = "addArticle")
     @ApiOperation(value = "添加或更新指定article")
-    public RespBean addArticle(@RequestParam("article") Article article, @RequestParam("dynamicTags") String[] dynamicTags) {
-        Long result = articleService.addArticle(article, dynamicTags);
+    public RespBean addArticle(@RequestBody Article article) {
+        Long result = articleService.addArticle(article);
         if (result != null) {
             return new RespBean("success", result + "");
         } else {

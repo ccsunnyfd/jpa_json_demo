@@ -7,7 +7,7 @@
       </el-select>
       <el-input v-model="article.title" placeholder="请输入标题..." style="width: 400px;margin-left: 10px"></el-input>
       <el-tag :key="tag.id" v-for="tag in dynamicTags" closable :disable-transitions="false" @close="handleClose(tag)" style="margin-left: 10px">
-        {{tag}}
+        {{tag.tagName}}
       </el-tag>
       <el-input class="input-new-tag" v-if="tagInputVisible" v-model="tagValue" ref="saveTagInput" size="small" @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm">
       </el-input>
@@ -53,7 +53,7 @@ export default {
       from: "",
       article: {
         id: "-1", // -1表示默认是新增操作，如果是编辑，那么会在mount时用获取的aid覆盖这里的-1
-        tags: [],
+        tags: "",
         title: "",
         mdContent: "",
         category: {
@@ -81,9 +81,15 @@ export default {
           if (resp.status == 200) {
             _this.article = resp.data;
             _this.article.category = resp.data.category;
-            var tags = resp.data.tags;
-            for (var i = 0; i < tags.length; i++) {
-              _this.dynamicTags.push(tags[i].tagName);
+            var tagList = [];
+            if (_this.article.tags) {
+              tagList = _this.article.tags.split(",");
+            }
+            for (var i = 0; i < tagList.length; i++) {
+              _this.dynamicTags.push({
+                id: i,
+                tagName: tagList[i]
+              });
             }
           } else {
             _this.$message({ type: "error", message: "页面加载失败!" });
@@ -116,21 +122,26 @@ export default {
       }
       var _this = this;
       _this.loading = true;
+      var currTagString = "";
+      for (var i = 0; i < _this.dynamicTags.length; i++) {
+        if (i == _this.dynamicTags.length - 1) {
+          currTagString = currTagString + _this.dynamicTags[i].tagName;
+        } else {
+          currTagString = currTagString + _this.dynamicTags[i].tagName + ",";
+        }
+      }
       jPostRequest("/api/article/addArticle/", {
-        article: {
-          id: _this.article.id,
-          title: _this.article.title,
-          mdContent: _this.article.mdContent,
-          htmlContent: _this.$refs.md.d_render,
-          category: {
-            id: _this.article.category.id,
-            cateName: _this.article.cateName,
-            modifiedTime: _this.article.modifiedTime
-          },
-          state: state,
-          tags: _this.article.tags
+        id: _this.article.id,
+        title: _this.article.title,
+        mdContent: _this.article.mdContent,
+        htmlContent: _this.$refs.md.d_render,
+        category: {
+          id: _this.article.category.id,
+          cateName: _this.article.cateName,
+          modifiedTime: _this.article.modifiedTime
         },
-        dynamicTags: _this.dynamicTags
+        state: state,
+        tags: currTagString
       }).then(
         resp => {
           _this.loading = false;
@@ -193,7 +204,10 @@ export default {
     handleInputConfirm() {
       let tagValue = this.tagValue;
       if (isNotNullORBlank(tagValue)) {
-        this.dynamicTags.push(tagValue);
+        this.dynamicTags.push({
+          id: tagValue,
+          tagName: tagValue
+        });
       }
       this.tagInputVisible = false;
       this.tagValue = "";
