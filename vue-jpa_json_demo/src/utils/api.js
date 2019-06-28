@@ -49,6 +49,22 @@ export const uploadFileRequest = (url, params) => {
         }
     });
 }
+
+export const jPutRequest = (url, params) => {
+    return axios({
+        method: 'put',
+        url: `${base}${url}`,
+        data: params,
+        withCredentials: true,
+        transformRequest: [function (data) {
+            return JSON.stringify(data)
+        }],
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
 export const putRequest = (url, params) => {
     return axios({
         method: 'put',
@@ -67,6 +83,22 @@ export const putRequest = (url, params) => {
         }
     });
 }
+
+export const jDeleteRequest = (url, params) => {
+    return axios({
+        method: 'delete',
+        url: `${base}${url}`,
+        data: params,
+        withCredentials: true,
+        transformRequest: [function (data) {
+            return JSON.stringify(data)
+        }],
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
 export const deleteRequest = (url) => {
     return axios({
         method: 'delete',

@@ -5,6 +5,7 @@ import com.tiger.jpa_json_demo.model.CategoryInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 /**
@@ -26,10 +27,11 @@ public class CategoryService {
     }
 
     @Transactional
-    public Boolean deleteCategoryByIds(List<Long> cids) {
-        for (Long cid : cids
+    public Boolean deleteCategoryByIds(String cids) {
+        String[] split = cids.split(",");
+        for (String cid : split
         ) {
-            categoryDao.deleteById(cid);
+            categoryDao.deleteById(Long.valueOf(cid));
         }
         return true;
     }

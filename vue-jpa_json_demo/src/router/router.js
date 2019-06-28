@@ -5,6 +5,7 @@ import Home from '@/components/Home'
 import ArticleList from '@/components/ArticleList'
 import BlogDetail from '@/components/BlogDetail'
 import PostArticle from '@/components/PostArticle'
+import CateMana from '@/components/CateMana'
 
 Vue.use(Router)
 
@@ -100,7 +101,7 @@ export default new Router({
                 {
                     path: '/category', 
                     name: 'category',
-                    //component: CateMana
+                    component: CateMana,
                     meta: {
                         title: '栏目管理',
                         iconCls: 'fa fa-reorder',

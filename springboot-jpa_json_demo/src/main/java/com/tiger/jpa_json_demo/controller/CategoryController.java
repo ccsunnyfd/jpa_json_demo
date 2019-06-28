@@ -50,7 +50,7 @@ public class CategoryController {
      */
     @PostMapping(path = "addCategory")
     @ApiOperation(value = "添加指定category")
-    public RespBean addCategory(@RequestBody CategoryInfo categoryInfo) {
+    public RespBean addCategory(@RequestBody  CategoryInfo categoryInfo) {
         Long result = categoryService.addOrUpdateCategory(categoryInfo);
         if (result != null) {
             return new RespBean("success", result + "");
@@ -66,7 +66,7 @@ public class CategoryController {
      * @param categoryInfo category
      * @return RespBean
      */
-    @PostMapping(path = "updateCategory")
+    @PutMapping(path = "updateCategory")
     @ApiOperation(value = "更新指定category")
     public RespBean updateCategory(@RequestBody CategoryInfo categoryInfo) {
         Long result = categoryService.addOrUpdateCategory(categoryInfo);
@@ -92,13 +92,13 @@ public class CategoryController {
 
     /**
      * 根据cids删除指定的Category
-     * api: localhost:8080/api/admin/category/deleteCategoryByIds
+     * api: localhost:8080/api/admin/category/deleteCategoryByIds/{cids}
      * @param cids List<Long> cids
      * @return RespBean
      */
-    @DeleteMapping("deleteCategoryByIds")
+    @DeleteMapping("deleteCategoryByIds/{cids}")
     @ApiOperation(value = "根据cids删除指定的Category")
-    public RespBean deleteCategoryById(@RequestParam("cids") List<Long> cids) {
+    public RespBean deleteCategoryById(@PathVariable String cids) {
         Boolean result = categoryService.deleteCategoryByIds(cids);
         if (result) {
             return new RespBean("success", "删除成功!");
