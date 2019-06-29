@@ -38,7 +38,7 @@ public class UserManageController {
     @GetMapping("user")
     @ApiOperation(value = "根据昵称查询用户信息")
     public List<UserInfo> getUserByNickname(@RequestParam(value = "nickname") String nickname) {
-        return userService.getUserByNickname(nickname);
+        return userService.getUserByNickname(nickname, 20).getContent();
     }
 
     /**
@@ -97,4 +97,19 @@ public class UserManageController {
         userService.updateUserRoles(rids, uid);
         return new RespBean("success", "更新用户角色成功!");
     }
+
+    /**
+     * 根据用户id删除用户信息
+     * api: localhost:8080/api/admin/user/{id}
+     *
+     * @param id 用户id
+     * @return 操作成功与否
+     */
+    @DeleteMapping("user/{id}")
+    @ApiOperation(value = "根据用户id删除用户信息")
+    public RespBean deleteUserById(@RequestParam(value = "id") Long id) {
+        userService.deleteUserById(id);
+        return new RespBean("success", "删除成功!");
+    }
+
 }

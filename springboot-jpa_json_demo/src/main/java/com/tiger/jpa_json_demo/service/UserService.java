@@ -1,5 +1,6 @@
 package com.tiger.jpa_json_demo.service;
 
+import com.google.common.collect.Lists;
 import com.tiger.jpa_json_demo.dao.RolesDao;
 import com.tiger.jpa_json_demo.dao.UserDao;
 import com.tiger.jpa_json_demo.model.RoleInfo;
@@ -8,13 +9,22 @@ import com.tiger.jpa_json_demo.utils.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
+import org.springframework.util.StringUtils;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.HashSet;
 import java.util.List;
 
@@ -40,6 +50,24 @@ public class UserService implements UserDetailsService {
         this.userDao = userDao;
     }
 
+
+    //动态构造查询语句
+    public Page<UserInfo> getUserByNickname(String nickname, int limit) {
+        Specification querySpeci = new Specification() {
+            @Override
+            public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                List<Predicate> predicates = Lists.newArrayList();
+                if (!StringUtils.isEmpty(nickname)) {
+                    predicates.add(criteriaBuilder.like(root.get("nickName"), "%" + nickname + "%"));
+                }
+                return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
+            }
+        };
+        Page<UserInfo> page = userDao.findAll(querySpeci, PageRequest.of(0, limit, new Sort(Sort.Direction.ASC, "id")));
+        return page;
+    }
+
+
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         logger.info("用户名： {}", s);
@@ -52,9 +80,9 @@ public class UserService implements UserDetailsService {
 
     /**
      * registration
+     *
      * @param user UserInfo
-     * @return
-     * 0: success
+     * @return 0: success
      * 1: duplicate username
      * 2: registration failure
      */
@@ -69,7 +97,7 @@ public class UserService implements UserDetailsService {
 
         //配置用户角色，默认都是普通用户 id=2
         RoleInfo role = new RoleInfo();
-        role.setId((long)2);
+        role.setId((long) 2);
         HashSet<RoleInfo> roleSet = new HashSet<>();
         roleSet.add(role);
         user.setRoles(roleSet);
@@ -86,9 +114,6 @@ public class UserService implements UserDetailsService {
         userDao.updateEmailById(email, Util.getCurrentUser().getId());
     }
 
-    public List<UserInfo> getUserByNickname(String nickname) {
-        return userDao.getUserInfoByNickname(nickname);
-    }
 
     public List<RoleInfo> getAllRoles() {
         return rolesDao.findAll();

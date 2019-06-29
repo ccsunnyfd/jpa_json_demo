@@ -2,21 +2,18 @@ package com.tiger.jpa_json_demo.dao;
 
 import com.tiger.jpa_json_demo.model.UserInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
-import java.util.List;
 
 /**
  * UserDao
  *
  * @version 1.0
  */
-public interface UserDao extends JpaRepository<UserInfo, Long> {
+public interface UserDao extends JpaRepository<UserInfo, Long>, JpaSpecificationExecutor {
     UserInfo findUserInfoByUsername(String username);
-
-    List<UserInfo> getUserInfoByNickname(String nickname);
 
     UserInfo getUserInfoById(Long uid);
 

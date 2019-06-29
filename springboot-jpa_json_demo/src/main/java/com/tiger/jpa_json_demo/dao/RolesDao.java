@@ -12,5 +12,4 @@ import java.util.List;
  */
 public interface RolesDao extends JpaRepository<RoleInfo, Long> {
     List<RoleInfo> getRolesById(Long id);
-    List<RoleInfo> findAll();
 }
