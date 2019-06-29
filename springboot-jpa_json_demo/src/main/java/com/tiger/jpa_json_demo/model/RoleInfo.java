@@ -1,6 +1,7 @@
 package com.tiger.jpa_json_demo.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 
@@ -17,7 +18,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class RoleInfo {
     @Id
     private Long id;
@@ -26,6 +27,7 @@ public class RoleInfo {
     @Column(name = "name", nullable = false, length = 20)
     private String name;
 
-    @ManyToMany(cascade = CascadeType.REFRESH, mappedBy = "roles", fetch = FetchType.EAGER)
+    @JsonIgnore
+    @ManyToMany(cascade = CascadeType.REFRESH, mappedBy = "roles", fetch = FetchType.LAZY)
     private Set<UserInfo> users;
 }

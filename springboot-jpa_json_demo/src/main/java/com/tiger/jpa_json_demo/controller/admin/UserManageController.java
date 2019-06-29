@@ -18,7 +18,7 @@ import java.util.List;
  * @version 1.0
  */
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/api/admin")
 @Api(value = "超级管理员用户管理")
 public class UserManageController {
     private UserService userService;
@@ -50,7 +50,7 @@ public class UserManageController {
      */
     @GetMapping("user/{id}")
     @ApiOperation(value = "根据用户id查询用户信息")
-    public UserInfo getUserById(@RequestParam(value = "id") Long id) {
+    public UserInfo getUserById(@PathVariable(value = "id") Long id) {
         return userService.getUserById(id);
     }
 
@@ -93,7 +93,7 @@ public class UserManageController {
      */
     @PutMapping("user/role")
     @ApiOperation(value = "更新用户角色")
-    public RespBean updateUserRoles(Long[] rids, Long uid) {
+    public RespBean updateUserRoles(@RequestParam(value="rids") Long[] rids, @RequestParam(value="id") Long uid) {
         userService.updateUserRoles(rids, uid);
         return new RespBean("success", "更新用户角色成功!");
     }
@@ -107,7 +107,7 @@ public class UserManageController {
      */
     @DeleteMapping("user/{id}")
     @ApiOperation(value = "根据用户id删除用户信息")
-    public RespBean deleteUserById(@RequestParam(value = "id") Long id) {
+    public RespBean deleteUserById(@PathVariable(value = "id") Long id) {
         userService.deleteUserById(id);
         return new RespBean("success", "删除成功!");
     }

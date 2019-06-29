@@ -6,6 +6,7 @@ import ArticleList from '@/components/ArticleList'
 import BlogDetail from '@/components/BlogDetail'
 import PostArticle from '@/components/PostArticle'
 import CateMana from '@/components/CateMana'
+import UserMana from '@/components/UserMana'
 
 Vue.use(Router)
 
@@ -80,7 +81,7 @@ export default new Router({
                 {
                     path: '/userMana',
                     name: 'user',
-                    //component: UserMana
+                    component: UserMana,
                     meta: {
                         title: '用户管理',
                         iconCls: 'fa fa-user-o',

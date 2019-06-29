@@ -58,7 +58,7 @@ public class UserService implements UserDetailsService {
             public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 List<Predicate> predicates = Lists.newArrayList();
                 if (!StringUtils.isEmpty(nickname)) {
-                    predicates.add(criteriaBuilder.like(root.get("nickName"), "%" + nickname + "%"));
+                    predicates.add(criteriaBuilder.like(root.get("nickname"), "%" + nickname + "%"));
                 }
                 return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
             }

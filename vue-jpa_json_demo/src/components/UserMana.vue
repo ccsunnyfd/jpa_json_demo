@@ -26,7 +26,7 @@
           </div>
           <div style="text-align: left;color:#20a0ff;font-size: 12px;margin-top: 13px;display: flex;align-items: center">
             <span>用户状态:</span>
-            <el-switch v-model="user.enabled" active-text="启用" active-color="#13ce66" @change="enabledChange(user.enabled,user.id,index)" inactive-text="禁用" style="font-size: 12px">
+            <el-switch v-model="user.enabled" :active-value="1" :inactive-value="0" active-text="启用" active-color="#13ce66" @change="enabledChange(user.enabled,user.id,index)" inactive-text="禁用" style="font-size: 12px">
             </el-switch>
           </div>
           <div style="text-align: left;color:#20a0ff;font-size: 12px;margin-top: 13px">
@@ -50,6 +50,7 @@
 <script>
 import { getRequest } from "../utils/api";
 import { putRequest } from "../utils/api";
+import { jPutRequest } from "@/utils/api";
 import { deleteRequest } from "../utils/api";
 export default {
   data() {
@@ -67,10 +68,10 @@ export default {
   mounted: function() {
     this.loading = true;
     this.loadUserList();
-    this.cardloading = Array.apply(null, Array(20)).map(function(item, i) {
+    this.cardloading = Array.apply(null, Array(20)).map(function() {
       return false;
     });
-    this.eploading = Array.apply(null, Array(20)).map(function(item, i) {
+    this.eploading = Array.apply(null, Array(20)).map(function() {
       return false;
     });
   },
@@ -173,7 +174,7 @@ export default {
           _this.cardloading.splice(index, 1, false);
           _this.$message({ type: "success", message: "更新成功!" });
         },
-        resp => {
+        () => {
           _this.$message({ type: "error", message: "更新失败!" });
           _this.loadOneUserById(id, index);
         }
@@ -218,7 +219,7 @@ export default {
               _this.loading = false;
               _this.$message({ type: "error", message: "删除失败!" });
             },
-            resp => {
+            () => {
               _this.loading = false;
               _this.$message({ type: "error", message: "删除失败!" });
             }
