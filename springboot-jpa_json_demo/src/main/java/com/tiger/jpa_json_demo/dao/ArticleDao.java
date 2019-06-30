@@ -53,6 +53,50 @@ public interface ArticleDao  extends JpaRepository<Article, Long>, JpaSpecificat
     @Query(value = "update Article a set a.pageView = a.pageView+1 where a.id = :aid")
     void pvIncrement(@Param("aid") Long aid);
 
+    /**
+     * DROP TABLE IF EXISTS `pv`;
+     * CREATE TABLE `pv` (
+     *   `id` bigint(20) NOT NULL AUTO_INCREMENT,
+     *   `countDate` date DEFAULT NULL,
+     *   `pv` int(11) DEFAULT NULL,
+     *   `uid` bigint(20) DEFAULT NULL,
+     *   PRIMARY KEY (`id`),
+     *   KEY `pv_ibfk_1` (`uid`),
+     *   CONSTRAINT `pv_ibfk_1` FOREIGN KEY (`uid`) REFERENCES `userinfo` (`id`) ON DELETE CASCADE
+     * ) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+
+     -- ----------------------------
+     -- View structure for pvview
+     -- ----------------------------
+     DROP VIEW IF EXISTS `pvview`;
+     CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost`  VIEW `pvview` AS select sum(pv) as pv,uid from pv group by uid ;
+
+     -- ----------------------------
+     -- View structure for totalpvview
+     -- ----------------------------
+     DROP VIEW IF EXISTS `totalpvview`;
+     CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost`  VIEW `totalpvview` AS select sum(page_view) as totalPv,user_id from article a group by user_id ;
+     SET FOREIGN_KEY_CHECKS=1;
+
+     */
+
+
+
+
+    //pvview视图保存从pv每日计算的总的分类统计累加，totalpvview视图保存从article表收集的分类统计累加，totalPv - pv正好是每日新增量
+    @Query(value = "INSERT INTO pv(countDate,pv,uid) \n" +
+            "SELECT CURRENT_DATE(),totalPv - pv, t.user_id FROM pvview p,\n" +
+            "totalpvview t \n" +
+            "WHERE p.uid =t.user_id", nativeQuery = true)
+    void pvStatisticsPerDay();
+
+    //获得最近七日的pv横轴数据--日期
+    @Query(value = "SELECT countDate from pv WHERE uid=?1 ORDER by countDate DESC limit 7", nativeQuery = true)
+    List<String> getCategories(Long uid);
+
+    //获得最近七日的pv纵轴数据--pv
+    @Query(value = "SELECT pv from pv WHERE uid=?1 ORDER by countDate DESC limit 7", nativeQuery = true)
+    List<Integer> getDataStatistics(Long uid);
 
 //
 //    @Query(value = "select a from Article a where a.state=:state and a.title LIKE CONCAT('%',:keyword,'%') order by a.editTime desc")

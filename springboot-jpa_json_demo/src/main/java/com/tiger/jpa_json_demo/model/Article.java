@@ -59,7 +59,7 @@ public class Article {
     private Integer state;
 
     // pv: 页面点击量
-    @Column(name = "pageView", length = 10)
+    @Column(name = "pageView", length = 10, insertable = false,columnDefinition = "int default 0")
     private Integer pageView;
 
     @LastModifiedDate

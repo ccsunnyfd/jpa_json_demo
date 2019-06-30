@@ -7,6 +7,7 @@ import BlogDetail from '@/components/BlogDetail'
 import PostArticle from '@/components/PostArticle'
 import CateMana from '@/components/CateMana'
 import UserMana from '@/components/UserMana'
+import DataCharts from '@/components/DataCharts'
 
 Vue.use(Router)
 
@@ -123,7 +124,7 @@ export default new Router({
                 {
                     path: '/charts',
                     name: 'charts',                   
-                    //component: DataCharts,
+                    component: DataCharts,
                     meta: {
                         title: '数据统计',
                         iconCls: 'fa fa-bar-chart',

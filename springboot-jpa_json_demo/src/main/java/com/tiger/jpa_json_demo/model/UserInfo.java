@@ -45,7 +45,7 @@ public class UserInfo implements UserDetails {
     @Column(name = "nickname", length = 20)
     private String nickname;
 
-    @Column(name = "enabled", columnDefinition = "int default 1")
+    @Column(name = "enabled", insertable = false, columnDefinition = "int default 1")
     private Integer enabled;    // 1:enabled 0:disabled
 
     //这里用延迟初始化查询时会报错，用EAGER

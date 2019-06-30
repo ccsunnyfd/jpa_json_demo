@@ -244,5 +244,25 @@ public class ArticleService {
         }
     }
 
+    public void pvStatisticsPerDay() {
+        articleDao.pvStatisticsPerDay();
+    }
+
+    /**
+     * 获取最近七天的日期
+     * @return
+     */
+    public List<String> getCategories() {
+        return articleDao.getCategories(Util.getCurrentUser().getId());
+    }
+
+    /**
+     * 获取最近七天的pv数据
+     * @return
+     */
+    public List<Integer> getDataStatistics() {
+        return articleDao.getDataStatistics(Util.getCurrentUser().getId());
+    }
+
 
 }

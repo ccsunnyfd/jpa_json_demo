@@ -50,7 +50,6 @@
 <script>
 import { getRequest } from "../utils/api";
 import { putRequest } from "../utils/api";
-import { jPutRequest } from "@/utils/api";
 import { deleteRequest } from "../utils/api";
 export default {
   data() {

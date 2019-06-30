@@ -1,8 +1,10 @@
 package com.tiger.jpa_json_demo.controller;
 
 import com.tiger.jpa_json_demo.model.Article;
+import com.tiger.jpa_json_demo.model.CategoryInfo;
 import com.tiger.jpa_json_demo.model.RespBean;
 import com.tiger.jpa_json_demo.service.ArticleService;
+import com.tiger.jpa_json_demo.service.CategoryService;
 import com.tiger.jpa_json_demo.utils.Util;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,12 +33,18 @@ import java.util.*;
 @Api(value = "article信息的增删改查")
 public class ArticleController {
     private ArticleService articleService;
+    private CategoryService categoryService;
 
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 
     @Autowired
     public void setArticleService(ArticleService articleService) {
         this.articleService = articleService;
+    }
+
+    @Autowired
+    public void setCategoryService(CategoryService categoryService) {
+        this.categoryService = categoryService;
     }
 // 如果使用@RequestBody，那么会自动将从前端传过来的json格式的参数封装为java bean对象，可以解决Postman在Post body中发送json格式的数据接收不到的问题
     // 如果不使用@RequestBody，那么vue-resource方式的前端脚本在跨域请求时需要加上{ emulateJSON: true }，使用了@RequestBody则要注释掉这个JSON模拟，否则浏览器会报415错误
@@ -153,5 +161,21 @@ public class ArticleController {
     public RespBean cycleArticle(@RequestParam("aids") Long[] aids, @RequestParam("state") Integer state) {
         articleService.cycleArticle(aids, state);
         return new RespBean("success", "已删除!");
+    }
+
+    /**
+     * 取出PV统计数据，使用Echarts展示
+     * api: localhost:8080/api/article/dataStatistics
+     * @return map
+     */
+    @GetMapping("dataStatistics")
+    @ApiOperation(value = "取出PV统计数据，使用Echarts展示")
+    public Map<String,Object> dataStatistics() {
+        Map<String, Object> map = new HashMap<>();
+        List<String> categories = articleService.getCategories();
+        List<Integer> dataStatistics = articleService.getDataStatistics();
+        map.put("categories", categories);
+        map.put("ds", dataStatistics);
+        return map;
     }
 }
