@@ -126,7 +126,7 @@ export default {
 }
 
 .el-header {
-  background-color: #20a0ff;
+  background-color: #5b6270;
   color: #333;
   text-align: center;
   display: flex;

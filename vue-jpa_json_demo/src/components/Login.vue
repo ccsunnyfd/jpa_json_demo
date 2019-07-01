@@ -1,42 +1,23 @@
 <template>
-  <el-form
-    :model="loginForm"
-    :rules="rules"
-    class="login-container"
-    label-position="left"
-    label-width="0px"
-    v-loading="loading"
-  >
+
+  <Form ref="loginForm" :model="loginForm" :rules="rules" class="login-container">
     <h3 class="login_title">系统登录</h3>
-    <el-form-item prop="username">
-      <el-input
-        type="text"
-        v-model="loginForm.username"
-        auto-complete="off"
-        placeholder="账号"
-      ></el-input>
-    </el-form-item>
-    <el-form-item prop="password">
-      <el-input
-        type="password"
-        v-model="loginForm.password"
-        auto-complete="off"
-        placeholder="密码"
-      ></el-input>
-    </el-form-item>
-    <el-checkbox
-      class="login_remember"
-      v-model="checked"
-      label-position="left"
-    >记住密码</el-checkbox>
-    <el-form-item style="width: 100%">
-      <el-button
-        type="primary"
-        @click.native.prevent="submitClick"
-        style="width: 100%"
-      >登录</el-button>
-    </el-form-item>
-  </el-form>
+    <FormItem prop="username">
+      <iInput type="text" v-model="loginForm.username" placeholder="账号">
+        <Icon type="ios-person-outline" slot="prepend"></Icon>
+      </iInput>
+    </FormItem>
+    <FormItem prop="password">
+      <iInput type="password" v-model="loginForm.password" placeholder="密码">
+        <Icon type="ios-lock-outline" slot="prepend"></Icon>
+      </iInput>
+    </FormItem>
+    <Checkbox class="login_remember" v-model="checked">记住密码</Checkbox>
+    <FormItem>
+      <Button type="primary" @click.native.prevent="submitClick">登录</Button>
+    </FormItem>
+  </Form>
+
 </template>
 
 <script>
@@ -54,8 +35,8 @@ export default {
       },
       checked: true,
       loginForm: {
-        username: "sang",
-        password: "123"
+        username: "",
+        password: ""
       },
       loading: false
     };
@@ -100,19 +81,21 @@ export default {
   margin: 180px auto;
   width: 350px;
   padding: 35px 35px 15px 35px;
-  background: #fff;
-  border: 1px solid #eaeaea;
+  background: #303030;
+  border: 1px solid #e5e5e5;
   box-shadow: 0 0 25px #cac6c6;
 }
 
 .login_title {
+  font-size: 20px;
   margin: 0px auto 40px auto;
   text-align: center;
-  color: #505458;
+  color: #ffffff;
 }
 
 .login_remember {
   margin: 0px 0px 35px 0px;
   text-align: left;
+  color: #ffffff;
 }
 </style>

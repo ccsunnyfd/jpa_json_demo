@@ -7,9 +7,13 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'font-awesome/css/font-awesome.min.css'
 
+import iView from 'iview'
+import 'iview/dist/styles/iview.css'
+
 import './utils/filter_utils.js'
 
 Vue.use(ElementUI)
+Vue.use(iView)
 Vue.use(VueBus)
 //Vue.prototype.axios = axios
 Vue.config.productionTip = false
