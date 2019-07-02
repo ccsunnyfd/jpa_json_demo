@@ -8,7 +8,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import 'font-awesome/css/font-awesome.min.css'
 
 import iView from 'iview'
-import 'iview/dist/styles/iview.css'
+import './index.less'
 
 import './utils/filter_utils.js'
 

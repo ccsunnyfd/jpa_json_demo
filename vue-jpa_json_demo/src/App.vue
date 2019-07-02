@@ -10,14 +10,19 @@ export default {
 }
 </script>
 
-<style>
-#app {
-  background-color: rgba(235, 235, 235, 0.08);
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style lang="less">
+.size{
+  width: 100%;
+  height: 100%;
 }
+html,body{
+  .size;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+#app {
+  .size;
+}
+
 </style>

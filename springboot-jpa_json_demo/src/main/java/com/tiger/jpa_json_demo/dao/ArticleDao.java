@@ -81,8 +81,6 @@ public interface ArticleDao  extends JpaRepository<Article, Long>, JpaSpecificat
      */
 
 
-
-
     //pvview视图保存从pv每日计算的总的分类统计累加，totalpvview视图保存从article表收集的分类统计累加，totalPv - pv正好是每日新增量
     @Query(value = "INSERT INTO pv(countDate,pv,uid) \n" +
             "SELECT CURRENT_DATE(),totalPv - pv, t.user_id FROM pvview p,\n" +

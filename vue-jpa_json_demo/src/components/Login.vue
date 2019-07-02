@@ -1,22 +1,35 @@
 <template>
 
-  <Form ref="loginForm" :model="loginForm" :rules="rules" class="login-container">
-    <h3 class="login_title">系统登录</h3>
-    <FormItem prop="username">
-      <iInput type="text" v-model="loginForm.username" placeholder="账号">
-        <Icon type="ios-person-outline" slot="prepend"></Icon>
-      </iInput>
-    </FormItem>
-    <FormItem prop="password">
-      <iInput type="password" v-model="loginForm.password" placeholder="密码">
-        <Icon type="ios-lock-outline" slot="prepend"></Icon>
-      </iInput>
-    </FormItem>
-    <Checkbox class="login_remember" v-model="checked">记住密码</Checkbox>
-    <FormItem>
-      <Button type="primary" @click.native.prevent="submitClick">登录</Button>
-    </FormItem>
-  </Form>
+  <div class="login">
+    <div class="login-con">
+      <Card icon="log-in" title="欢迎登录" :bordered="false">
+        <div class="form-con">
+
+          <Form ref="loginForm" :model="form" :rules="rules" class="login-container" @keydown.enter.native="handleSubmit">
+            <FormItem prop="username">
+              <iInput type="text" v-model="form.username" placeholder="请输入用户名">
+                <span slot="prepend">
+                  <Icon :size="16" type="ios-person"></Icon>
+                </span>
+              </iInput>
+            </FormItem>
+            <FormItem prop="password">
+              <iInput type="password" v-model="form.password" placeholder="请输入密码">
+                <span slot="prepend">
+                  <Icon :size="14" type="md-lock"></Icon>
+                </span>
+              </iInput>
+            </FormItem>
+            <Checkbox class="login_remember" v-model="checked">记住密码</Checkbox>
+            <FormItem>
+              <Button type="primary" @click.native.prevent="handleSubmit">登录</Button>
+            </FormItem>
+          </Form>
+
+        </div>
+      </Card>
+    </div>
+  </div>
 
 </template>
 
@@ -34,7 +47,7 @@ export default {
         password: [{ required: true, message: "请输入密码", trigger: "blur" }]
       },
       checked: true,
-      loginForm: {
+      form: {
         username: "",
         password: ""
       },
@@ -42,12 +55,12 @@ export default {
     };
   },
   methods: {
-    submitClick: function() {
+    handleSubmit: function() {
       var _this = this;
       this.loading = true;
       postRequest("/login", {
-        username: this.loginForm.username,
-        password: this.loginForm.password
+        username: this.form.username,
+        password: this.form.password
       }).then(
         resp => {
           _this.loading = false;
@@ -74,28 +87,40 @@ export default {
 };
 </script>
 
-<style scoped>
-.login-container {
-  border-radius: 15px;
-  background-clip: padding-box;
-  margin: 180px auto;
-  width: 350px;
-  padding: 35px 35px 15px 35px;
-  background: #303030;
-  border: 1px solid #e5e5e5;
-  box-shadow: 0 0 25px #cac6c6;
-}
-
-.login_title {
-  font-size: 20px;
-  margin: 0px auto 40px auto;
-  text-align: center;
-  color: #ffffff;
-}
-
-.login_remember {
-  margin: 0px 0px 35px 0px;
-  text-align: left;
-  color: #ffffff;
+<style lang="less" scoped>
+.login {
+  width: 100%;
+  height: 100%;
+  background-image: url("../assets/images/login-bg.jpg");
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  &-con {
+    position: absolute;
+    right: 30%;
+    top: 50%;
+    transform: translateY(-40%);
+    width: 300px;
+    &-header {
+      font-size: 16px;
+      font-weight: 300;
+      text-align: center;
+      padding: 30px 0;
+    }
+    .form-con {
+      padding: 10px 0 0;
+    }
+    .log-in {
+      .form-con {
+        .loginForm {
+          .login_remember {
+            font-size: 10px;
+            text-align: center;
+            color: #c3c3c3;
+          }
+        }
+      }
+    }
+  }
 }
 </style>
